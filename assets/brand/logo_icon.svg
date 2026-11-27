@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Simplified shadow puppet icon inspired by traditional piying silhouette -->
+  <defs>
+    <style>
+      .puppet { fill: #1a1a1a; }
+      .accent { fill: #C8102E; opacity: 0.15; }
+    </style>
+  </defs>
+  
+  <!-- Soft glow / screen suggestion -->
+  <ellipse cx="100" cy="105" rx="70" ry="85" class="accent"/>
+  
+  <!-- Main puppet silhouette - stylized side profile -->
+  <g class="puppet">
+    <!-- Head and headdress -->
+    <path d="M95 30 
+             C85 25, 75 30, 70 40
+             C65 50, 68 60, 75 65
+             L80 70
+             C78 80, 80 90, 85 95
+             L90 100
+             C95 105, 105 105, 110 100
+             L115 95
+             C120 90, 122 80, 120 70
+             L125 65
+             C132 60, 135 50, 130 40
+             C125 30, 115 25, 105 30
+             Z"/>
+    
+    <!-- Body -->
+    <path d="M90 100 
+             C85 110, 80 130, 85 150
+             L90 170
+             C95 180, 105 180, 110 170
+             L115 150
+             C120 130, 115 110, 110 100
+             Z"/>
+    
+    <!-- Arm suggestion -->
+    <path d="M85 120 
+             C70 115, 55 120, 50 130
+             C48 135, 52 140, 58 138
+             C70 130, 80 125, 90 125
+             Z"/>
+    
+    <!-- Decorative cut-out suggestion (negative space circles) -->
+    <circle cx="95" cy="50" r="3" fill="white"/>
+    <circle cx="105" cy="55" r="2.5" fill="white"/>
+    <circle cx="100" cy="140" r="4" fill="white"/>
+  </g>
+  
+  <!-- Small text mark -->
+  <text x="100" y="195" text-anchor="middle" font-family="serif" font-size="14" fill="#1a1a1a">皮影</text>
+</svg>
