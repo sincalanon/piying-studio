@@ -1,0 +1,85 @@
+{
+  "name": "dsh-shisei",
+  "version": "0.2.2",
+  "description": "Unofficial DSH plugin: Shisei (拾戏) makes AI short dramas from one sentence (script, cast, first frames, takes, cut) and remakes dance videos with a character of your choice, on your own compshare GPU",
+  "icon": "./icon.svg",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "shisei",
+    "mannequin",
+    "comfyui",
+    "minimax-h3",
+    "short-drama",
+    "ai-drama",
+    "ai-video",
+    "qwen-image"
+  ],
+  "homepage": "https://shisei.indaloop.app/",
+  "license": "(Apache-2.0 AND GPL-3.0-only)",
+  "author": "wquguru",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "icon.svg",
+    "locale/*.json",
+    "lib",
+    "skills",
+    "cordis.patch.yml",
+    "LICENSE",
+    "NOTICE",
+    "LICENSES",
+    "CHANGELOG.md",
+    "README.md",
+    "README.en.md",
+    "README.ja.md",
+    "README.ko.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build-client.mjs && node scripts/build-ssh.mjs",
+    "format": "prettier --write \"src/client/**/*.{js,jsx}\"",
+    "test": "node --test test/*.test.js && python3 -I -m unittest discover -s test -p 'test_*.py'"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.4",
+    "@deepseek-ai/dsh-skill": "^0.2.0-rc.2 || ^0.2.1-0 || ^0.2.2-0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2",
+    "prettier": "^3.4.2",
+    "ssh2": "^1.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wquguru/dsh-shisei.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wquguru/dsh-shisei/issues"
+  }
+}

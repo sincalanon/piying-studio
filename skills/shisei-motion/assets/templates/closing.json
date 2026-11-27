@@ -1,0 +1,60 @@
+{
+ "id": "closing",
+ "title": "打烊之后",
+ "quality": "576p",
+ "seeds": 1,
+ "story": {
+  "title": "打烊之后",
+  "script": "内景 咖啡馆 夜。大雨。林岚在吧台后擦杯子。\n林岚：打烊了，明天再来吧。\n（门口有人没走。她的手停住，很久才抬头。）\n林岚：……你回来了。",
+  "cast": [
+   {
+    "id": "linlan",
+    "name": "林岚",
+    "name_en": "Lin Lan",
+    "age": 32,
+    "look": "华人女性，鹅蛋脸，杏眼，黑色齐肩直发别在耳后，淡妆；米白色高领针织毛衣，深棕色帆布围裙，深灰色直筒长裤",
+    "voice": "a woman in her early thirties, warm and slightly low voice, slow pace, a little tired"
+   }
+  ],
+  "scenes": [
+   {
+    "id": "cafe",
+    "name": "咖啡馆",
+    "look": "夜晚打烊后的街角小咖啡馆室内，从门口看向吧台，深色实木吧台，上方一排暖黄色吊灯是唯一的光源，吧台后面是摆满杯子的木架和一台银色磨豆机，画面右侧一扇窗，窗外是下雨的夜晚街道"
+   }
+  ],
+  "props": [],
+  "shots": [
+   {
+    "id": "1-1",
+    "scene": "cafe",
+    "cast": [
+     "linlan"
+    ],
+    "seconds": 5,
+    "keyframe": "中景，摄影机平视，她站在吧台后面画面中间偏左，低头用抹布擦一只白色陶瓷杯，拍到腰部以上",
+    "action": "Static camera, no push, no pan. Lin Lan slowly wipes the white cup with the cloth, eyes down on the cup",
+    "line": {
+     "who": "linlan",
+     "text": "打烊了，明天再来吧。",
+     "delivery": "flat and tired, without looking up"
+    }
+   },
+   {
+    "id": "1-2",
+    "scene": "cafe",
+    "cast": [
+     "linlan"
+    ],
+    "seconds": 5,
+    "keyframe": "近景，只拍她的脸和肩膀，她站在吧台后面，双手捧着白色陶瓷杯，视线停在画面右侧的门口方向",
+    "action": "Static camera. Lin Lan's hands stop moving; after a long pause she slowly raises her eyes towards the door",
+    "line": {
+     "who": "linlan",
+     "text": "……你回来了。",
+     "delivery": "very softly"
+    }
+   }
+  ]
+ }
+}

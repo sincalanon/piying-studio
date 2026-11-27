@@ -1,0 +1,259 @@
+{
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "minimax_h3_ref2va_pruned_fp8_scaled.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+   "type": "minimax",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+  }
+ },
+ "4": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+  }
+ },
+ "5": {
+  "class_type": "MiniMaxH3SigmaShift",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "shift_video": 12,
+   "shift_audio": 3
+  }
+ },
+ "6": {
+  "class_type": "ModelAttentionBackend",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "attention": "comfy kitchen attention"
+  }
+ },
+ "7": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "lora_name": "minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
+   "strength_model": 1
+  }
+ },
+ "20": {
+  "class_type": "MiniMaxH3ReferenceToVideo",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ],
+   "audio_vae": [
+    "4",
+    0
+   ],
+   "prompt": "__PROMPT__",
+   "width": "__W__",
+   "height": "__H__",
+   "length": "__LEN__",
+   "ref_image_size": "match",
+   "ref_images.ref_image_0": [
+    "10",
+    0
+   ],
+   "ref_images.ref_image_1": [
+    "11",
+    0
+   ]
+  }
+ },
+ "30": {
+  "class_type": "BasicScheduler",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "scheduler": "normal",
+   "steps": 8,
+   "denoise": 1
+  }
+ },
+ "31": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "positive": [
+    "21",
+    0
+   ],
+   "negative": [
+    "21",
+    0
+   ],
+   "cfg": 1
+  }
+ },
+ "32": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "er_sde"
+  }
+ },
+ "33": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": "__SEED__"
+  }
+ },
+ "34": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "33",
+    0
+   ],
+   "guider": [
+    "31",
+    0
+   ],
+   "sampler": [
+    "32",
+    0
+   ],
+   "sigmas": [
+    "30",
+    0
+   ],
+   "latent_image": [
+    "20",
+    1
+   ]
+  }
+ },
+ "35": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "34",
+    0
+   ]
+  }
+ },
+ "36": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "35",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "37": {
+  "class_type": "VAEDecodeAudio",
+  "inputs": {
+   "samples": [
+    "35",
+    1
+   ],
+   "vae": [
+    "4",
+    0
+   ]
+  }
+ },
+ "38": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "36",
+    0
+   ],
+   "audio": [
+    "37",
+    0
+   ],
+   "fps": 24
+  }
+ },
+ "39": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "38",
+    0
+   ],
+   "filename_prefix": "drama/__PREFIX__",
+   "format": "auto",
+   "format.codec": "auto"
+  }
+ },
+ "10": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "__REF1__"
+  }
+ },
+ "11": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "__REF2__"
+  }
+ },
+ "16": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "__KF__"
+  }
+ },
+ "21": {
+  "class_type": "MiniMaxH3AddGuide",
+  "inputs": {
+   "positive": [
+    "20",
+    0
+   ],
+   "latent": [
+    "20",
+    1
+   ],
+   "frame_idx": 0,
+   "vae": [
+    "3",
+    0
+   ],
+   "image": [
+    "16",
+    0
+   ]
+  }
+ }
+}

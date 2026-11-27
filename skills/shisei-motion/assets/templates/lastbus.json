@@ -1,0 +1,209 @@
+{
+ "id": "lastbus",
+ "title": "末班车",
+ "quality": "576p",
+ "seeds": 2,
+ "story": {
+  "title": "末班车",
+  "script": "《末班车》\n\n夜，末班公交车。车厢空荡，暖白顶灯，窗外是后退的城市夜灯。\n\n【人物】苏晚（31 岁）：米色风衣，细框眼镜，黑色长发扎低马尾。陈默（33 岁）：深灰大衣，黑色双肩包。\n\n第一场\n1. 全景：陈默站在后门边的过道上，手提黑色双肩包，低头看向窗边座位：「这儿有人吗？」（礼貌、疲惫，像对陌生人。）苏晚抬头望向他。\n2. 近景：苏晚的眼睛停了一瞬，随后轻轻摇头。——心里：「是他。」\n3. 特写：她攥着膝上帆布包的包带，指节发白。——心里：「他会不会认出我。」\n4. 中景：陈默在她旁边坐下，侧头看了她一眼，礼貌地把目光移向车前方。苏晚低着头，看着自己的鞋。——心里：「他看着我的眼睛，却像第一次看见我。」\n5. 近景：陈默朝她的方向轻轻点一下下颌：「谢谢。」\n6. 特写：苏晚的嘴唇轻轻抿住，睫毛颤了一下。——心里：「……不提了。」\n7. 中景：到站提示音响。苏晚站在打开的车门口，一只手提着帆布包，回头看他：「……再见。」\n8. 近景：陈默坐在原位，脸朝车门的方向微微仰起，目光落在车门口，神情礼貌而平静。\n9. 特写：车窗玻璃上倒着苏晚的侧脸，她慢慢闭上眼睛，窗外的城市灯光在倒影里向后滑。——心里：「……就这样吧。」\n\n（她始终没有开口提过去。末班车把两个人重新拉回陌生。）",
+  "cast": [
+   {
+    "id": "suwan",
+    "name": "苏晚",
+    "name_en": "Su Wan",
+    "age": 31,
+    "look": "华人女性，鹅蛋脸，黑色长发扎低马尾，戴细框眼镜，淡妆；米色风衣，颈间灰色针织围巾",
+    "voice": "a woman in her early thirties, soft and calm voice, slow pace"
+   },
+   {
+    "id": "chenmo",
+    "name": "陈默",
+    "name_en": "Chen Mo",
+    "age": 33,
+    "look": "华人男性，短发，清瘦，眉眼疲惫；深灰色长大衣，黑色围巾，背一只黑色双肩包",
+    "voice": "a man in his early thirties, polite and tired voice, medium pace"
+   }
+  ],
+  "scenes": [
+   {
+    "id": "bus",
+    "name": "末班公交车",
+    "look": "深夜末班公交车内部，空的蓝色塑料座椅，暖白色顶灯，车窗外后退的城市夜景灯光，车窗玻璃映出车内灯光"
+   }
+  ],
+  "props": [
+   {
+    "id": "bag",
+    "name": "帆布包",
+    "look": "一只深棕色旧帆布包"
+   }
+  ],
+  "shots": [
+   {
+    "id": "1-1",
+    "scene": "bus",
+    "cast": [
+     "chenmo",
+     "suwan"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "全景，平视，公交车后门边的过道上，陈默站在画面左侧，手提着黑色双肩包，低头看向画面右侧靠窗座位上坐着的苏晚；苏晚抬头望向他。",
+    "action": "Wide shot, static camera. Chen Mo stands in the aisle by the rear door, bag in hand, looking down at Su Wan seated by the window on the right; Su Wan looks up at him."
+   },
+   {
+    "id": "1-2",
+    "scene": "bus",
+    "cast": [
+     "suwan"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "大特写，平视，构图裁到鼻根以上，只露苏晚的眼睛和眉毛，嘴角在画面外；她抬头望向画面左侧（陈默所在方向），眼睛停了一瞬，随后非常慢地摇头一次，眼神垂下。",
+    "action": "Extreme close-up, eyes only, frame cuts above the nose so the mouth is out of frame. Su Wan looks up toward the left of frame (toward Chen Mo), pauses a beat, then very slowly shakes her head once and lowers her eyes. She does not speak.",
+    "line": {
+     "who": "suwan",
+     "text": "是他。",
+     "kind": "inner"
+    }
+   },
+   {
+    "id": "1-3",
+    "scene": "bus",
+    "cast": [
+     "suwan"
+    ],
+    "props": [
+     "bag"
+    ],
+    "seconds": 4,
+    "keyframe": "特写，略俯，苏晚放在膝上的双手攥着深棕色帆布包的包带，指节发白；车窗灯光扫过她的手背。",
+    "action": "Extreme close-up. Su Wan's hands on her lap grip the strap of the dark canvas bag, knuckles tight; passing streetlights sweep over her hands.",
+    "line": {
+     "who": "suwan",
+     "text": "他会不会认出我。",
+     "kind": "inner"
+    }
+   },
+   {
+    "id": "2-1",
+    "scene": "bus",
+    "cast": [
+     "suwan",
+     "chenmo"
+    ],
+    "props": [],
+    "seconds": 5,
+    "keyframe": "中景，平视，两人并排坐着：苏晚在画面右侧靠窗，低头看着自己的鞋，嘴唇闭着不说话；陈默在画面左侧过道位，侧头看了她一眼后把目光移向车前方。",
+    "action": "Medium shot. Chen Mo lowers into the aisle seat on the left; Su Wan keeps her head down on the right by the window, lips closed, not speaking. He turns, rests his eyes on her face for a second, then politely looks ahead.",
+    "line": {
+     "who": "suwan",
+     "text": "他看着我的眼睛，却像第一次看见我。",
+     "kind": "inner"
+    }
+   },
+   {
+    "id": "2-2",
+    "scene": "bus",
+    "cast": [
+     "chenmo"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "近景，平视，画面只有陈默；他坐在画面左侧的过道座位上，脸朝画面右侧微微仰起，看向苏晚坐的靠窗方向，轻轻点一下下颌，随后望向车前方。",
+    "action": "Close-up. Only Chen Mo in frame, seated on the left; his face turns toward the right of frame, toward Su Wan at the window seat, gives a small nod, then looks ahead at the windshield.",
+    "line": {
+     "who": "chenmo",
+     "text": "谢谢。",
+     "kind": "say",
+     "delivery": "light and polite, like thanking any passenger"
+    }
+   },
+   {
+    "id": "2-3",
+    "scene": "bus",
+    "cast": [
+     "suwan"
+    ],
+    "props": [],
+    "seconds": 2,
+    "keyframe": "特写，平视，苏晚的嘴唇轻轻抿住、闭着不动，眼睛低垂，睫毛颤了一下。",
+    "action": "Extreme close-up. Su Wan presses her lips together, mouth closed and still, eyes lowered, eyelashes fluttering once. She does not speak.",
+    "line": {
+     "who": "suwan",
+     "text": "……不提了。",
+     "kind": "inner"
+    }
+   },
+   {
+    "id": "3-1",
+    "scene": "bus",
+    "cast": [
+     "suwan"
+    ],
+    "props": [
+     "bag"
+    ],
+    "seconds": 4,
+    "keyframe": "中景，侧后机位，苏晚站在打开的车门口（画面左侧），一只手提着深棕色帆布包，身体朝车门，头和视线转向画面右侧，望向画面右侧外座位上的陈默方向；只露侧后脸，脸不要朝向镜头。",
+    "action": "Static camera, side-back angle. Su Wan stands at the open door on the left, bag in hand, body toward the door; her head and eyes turn toward the right of frame, looking back at Chen Mo seated off-screen right. She keeps that gaze; her face is not toward the camera.",
+    "line": {
+     "who": "suwan",
+     "text": "……再见。",
+     "kind": "say",
+     "delivery": "very soft, holding back emotion, like saying goodbye to a stranger"
+    }
+   },
+   {
+    "id": "3-2",
+    "scene": "bus",
+    "cast": [
+     "chenmo"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "近景，平视，陈默坐在座位上，脸朝车门的方向微微仰起，目光落在车门口，神情礼貌而平静。",
+    "action": "Close-up. Chen Mo sits still, face lifted toward the door, eyes resting at the doorway, polite and calm."
+   },
+   {
+    "id": "3-3",
+    "scene": "bus",
+    "cast": [
+     "suwan"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "特写，平视，车窗玻璃上倒着苏晚的侧脸，嘴唇闭着不动，她的眼睛慢慢闭上，窗外的城市灯光在倒影里向后滑。",
+    "action": "Extreme close-up. In the window glass, the reflection of Su Wan's face, lips closed and still; she slowly closes her eyes as city lights slide behind her. She does not speak.",
+    "line": {
+     "who": "suwan",
+     "text": "……就这样吧。",
+     "kind": "inner"
+    }
+   }
+  ],
+  "segments": [
+   {
+    "shots": [
+     "1-1",
+     "1-2",
+     "1-3"
+    ]
+   },
+   {
+    "shots": [
+     "2-1",
+     "2-2",
+     "2-3"
+    ]
+   },
+   {
+    "shots": [
+     "3-1",
+     "3-2",
+     "3-3"
+    ]
+   }
+  ]
+ }
+}

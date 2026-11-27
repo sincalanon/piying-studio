@@ -1,0 +1,37 @@
+dsh-shisei
+Copyright 2026 wquguru
+
+Licensed under the Apache License, Version 2.0 (see LICENSE), with the exception below.
+
+skills/shisei-motion/assets/workflows/swap_studio.json
+skills/shisei-motion/assets/workflows/drama_take.json
+skills/shisei-motion/assets/workflows/mocap_glb.json
+  swap_studio.json is adapted from the Shot Planner character-swap example workflow of ComfyUI-BFSNodes
+  by alisson-anjos (https://github.com/alisson-anjos/ComfyUI-BFSNodes), licensed GPL-3.0; drama_take.json
+  reuses its MiniMax H3 sampling chain. mocap_glb.json came out of the same early experiments and is kept
+  under the same terms. These files are distributed under GPL-3.0-only (see LICENSES/GPL-3.0.txt). They are
+  separate data files that the plugin reads at run time and sends to ComfyUI; the rest of the plugin is
+  not derived from them.
+
+skills/shisei-motion/assets/workflows/drama_image.json was written for this project and is under
+Apache-2.0 like the rest of the code.
+
+skills/shisei-motion/assets/vendor/wheels/
+  Unmodified wheels of compshare-cli (Apache-2.0) and the packages it needs, shipped so it installs without a
+  network: ucloud-sdk-python3 (Apache-2.0), requests (Apache-2.0), urllib3 (MIT), certifi (MPL-2.0),
+  charset-normalizer (MIT), idna (BSD-3-Clause), rich (MIT), markdown-it-py (MIT), mdurl (MIT), pygments
+  (BSD-2-Clause), typer (MIT), click (BSD-3-Clause), shellingham (ISC), annotated-doc (MIT), pexpect (ISC),
+  ptyprocess (ISC), colorama (BSD-3-Clause). Each wheel carries its own license file; SHA256SUMS lists them.
+
+lib/ssh.cjs
+  Built from src/ssh/cli.js (Apache-2.0, this project) with ssh2 by Brian White (MIT), asn1 (MIT), bcrypt-pbkdf
+  (BSD-3-Clause), tweetnacl (Unlicense) and safer-buffer (MIT) bundled in, unmodified. Their license texts are
+  appended to the end of that file.
+
+Models used at runtime are not distributed here. MiniMax H3 and the character-swap / head-swap LoRAs
+are under the minimax-h3-community-license; Qwen-Image, SAM 3D Body, SAM 3.1 and MoGe are under their
+own licenses. Read them before commercial use.
+
+Test fixtures under test/fixtures/release/ (AI-generated character reference images used only for release
+testing) are not part of the npm package. Inputs listed there as local (a Pexels dance clip, a reference film)
+are never committed; inputs.json records only their source and sha256.

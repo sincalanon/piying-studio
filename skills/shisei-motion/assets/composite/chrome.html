@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Shisei Motion 三栏成片外框，1920x1080。改了以后重新截图成 chrome.png：
+     agent-browser open file://<本文件>  →  set viewport 1920 1080  →  screenshot chrome.png（先 open 再 set viewport）
+     三个视频窗口（3:4，600x800）的位置必须和 shisei.py 的 COMPOSITE_SLOTS 一致。
+     片段长度可变（2–15 秒），外框里不写帧数和刻度数字：时间轴是 10 等分，播放头按帧走完全程。 -->
+<html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1920px;height:1080px;background:#16171a;font-family:-apple-system,"SF Pro Text","Helvetica Neue",sans-serif;color:#c9cbd1;overflow:hidden;position:relative}
+.top{height:44px;background:#202125;border-bottom:1px solid #34363b;display:flex;align-items:center;padding:0 18px;gap:16px;font-size:14px}
+.top b{color:#f1f2f4;font-weight:600;letter-spacing:.01em}
+.mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#ff8a3d,#ff5e3a)}
+.pill{background:#16171a;border:1px solid #3e4046;border-radius:5px;padding:3px 10px;color:#e6e7ea;font-size:12px}
+.lbl{color:#8b8e96;font-size:12px}
+.sp{flex:1}
+.panel{position:absolute;top:44px;width:640px;height:900px;background:#1c1d21;border-right:1px solid #2e3035}
+.hdr{height:30px;background:#24252a;border-bottom:1px solid #303237;font-size:13px;display:flex;align-items:center;padding:0 14px;gap:8px;color:#d6d8dd}
+.dot{width:8px;height:8px;border-radius:50%}
+.slot{position:absolute;top:109px;width:600px;height:800px;background:#0c0c0e}
+.badge{margin-left:auto;font-size:11px;padding:2px 7px;border-radius:4px;background:#3a2a20;color:#ffb38a}
+.tl{position:absolute;left:0;top:944px;width:1920px;height:136px;background:#1f2024;border-top:1px solid #34363b}
+.ruler{position:absolute;left:60px;right:60px;top:14px;height:26px;border-bottom:1px solid #45474d}
+.tick{position:absolute;top:0;height:26px;border-left:1px solid #45474d;font-size:11px;color:#8b8e96;padding-left:4px}
+.track{position:absolute;left:60px;right:60px;height:22px;background:#2a2b30;border-radius:4px}
+.seg{position:absolute;top:4px;bottom:4px;left:0;right:0;border-radius:3px}
+.tname{position:absolute;left:10px;font-size:11px;color:#8b8e96}
+</style></head><body>
+<div class="top">
+  <span class="mark"></span><b>Shisei Remake</b><span class="lbl">24 fps</span>
+  <span class="sp"></span>
+  <span class="lbl">Motion</span><span class="pill">SAM3D Body</span>
+  <span class="lbl">Video</span><span class="pill">MiniMax H3 Ref2VA</span>
+  <span class="lbl">LoRA</span><span class="pill">Character Swap</span>
+</div>
+<div class="panel" style="left:0"><div class="hdr"><span class="dot" style="background:#e0a33a"></span>Source video</div></div>
+<div class="panel" style="left:640px"><div class="hdr"><span class="dot" style="background:#8b8e96"></span>3D mannequin</div></div>
+<div class="panel" style="left:1280px;border-right:none"><div class="hdr"><span class="dot" style="background:#ff7a3d"></span>Character</div></div>
+<div class="slot" style="left:20px"></div>
+<div class="slot" style="left:660px"></div>
+<div class="slot" style="left:1300px"></div>
+<div class="tl">
+  <div class="ruler" id="r"></div>
+  <span class="tname" style="top:56px">Motion</span>
+  <div class="track" style="top:52px"><div class="seg" style="background:#3c6e66"></div></div>
+  <span class="tname" style="top:90px">Swap</span>
+  <div class="track" style="top:86px"><div class="seg" style="background:#7a4a35"></div></div>
+</div>
+<script>
+const r = document.getElementById('r')
+for (let i = 0; i <= 10; i++) {
+  const t = document.createElement('div'); t.className = 'tick'
+  t.style.left = (i * 10) + '%'; r.appendChild(t)
+}
+</script>
+</body></html>

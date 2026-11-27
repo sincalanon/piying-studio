@@ -1,0 +1,259 @@
+{
+ "id": "clothesline",
+ "title": "晾衣绳",
+ "quality": "576p",
+ "seeds": 2,
+ "story": {
+  "title": "晾衣绳",
+  "script": "《晾衣绳》\n场景：老小区楼顶天台，傍晚，风大。\n人物：苏岚（31岁，姐姐）、苏野（27岁，弟弟）\n\n第1段\n1-1 中景：苏岚在晾衣绳边收一床白床单，苏野提着橘子袋从右侧楼梯口上来，两人隔着半床垂下的床单对视。\n苏岚：五年不回来，橘子倒记得我爱吃。\n1-2 近景：苏野在楼梯口举起橘子袋。\n苏野：姐，我是来跟你道歉的。\n\n第2段\n2-1 特写：苏岚眯着眼，哼了一声。\n苏岚：道歉？晚了五年了啊。\n2-2 近景：苏野把袋子放低，承认似的。\n苏野：那时候，不敢回来见你。\n2-3 中景：苏岚把床单搭上肩，背对他一顿，又转回来。\n苏岚：不敢见我，橘子倒敢送。\n\n第3段\n3-1 中景：风把床单吹鼓，苏野上前按住床单角，两只手在布上碰到一起，苏岚没躲。\n苏野：这次不搬走了。\n3-2 特写：苏岚低头看交叠的手，嘴角动了一下，没笑。\n苏岚（内心）：……还知道回来。\n3-3 中景：苏岚把床单整床解下来抖开，苏野扶着床单边，没退。\n（无台词）\n\n第4段\n4-1 中景：苏岚把床单一角递到苏野手边。\n苏岚：搭把手。\n4-2 特写：两双手一起把床单折出第一道褶。\n（无台词）\n4-3 中景：两人并肩蹲着把床单叠好，晚霞暗下去，晾衣绳空了。\n苏岚（低声）：风停了，再走。",
+  "cast": [
+   {
+    "id": "sulan",
+    "name": "苏岚",
+    "name_en": "Su Lan",
+    "age": 31,
+    "look": "华人女性，鹅蛋脸，黑色长发随意扎成低马尾，几缕碎发被风吹在脸侧，淡妆；米灰色旧针织开衫，深色长裤，袖口卷到小臂",
+    "voice": "a Chinese woman in her early thirties, warm but sharp-edged voice, slow pace, slightly hoarse"
+   },
+   {
+    "id": "suye",
+    "name": "苏野",
+    "name_en": "Su Ye",
+    "age": 27,
+    "look": "华人男性，瘦高，黑色短寸，眉眼发倦；洗得发白的军绿夹克，深色牛仔裤",
+    "voice": "a Chinese man in his late twenties, soft and hesitant voice, a bit nasal, sincere"
+   }
+  ],
+  "scenes": [
+   {
+    "id": "roof",
+    "name": "楼顶天台",
+    "look": "老小区楼顶天台傍晚，晾衣绳上挂着几床旧白床单，画面右侧有通往楼下的铁门楼梯口，远处是密集的居民楼屋顶，天边橘粉色晚霞，风大"
+   }
+  ],
+  "props": [
+   {
+    "id": "tangerines",
+    "name": "一袋橘子",
+    "look": "透明塑料袋装着十几个橘子，袋口松松系着"
+   }
+  ],
+  "shots": [
+   {
+    "id": "1-1",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 4,
+    "keyframe": "中景，平视。苏岚在画面左侧，正把一床白床单从晾衣绳上往下收，脸朝画面右侧（苏野所在方向）；苏野在画面右侧的铁楼梯口停下，提着一袋橘子，脸朝画面左侧（苏岚所在方向）。两人隔着半床垂下的白床单对视，风把床单吹得鼓起。",
+    "action": "Static camera. Su Lan pulls a white sheet off the clothesline; Su Ye stops at the stairway door on the right, holding a plastic bag of tangerines; Su Lan freezes, the sheet hanging between them.",
+    "line": {
+     "who": "sulan",
+     "text": "五年不回来，橘子倒记得我爱吃。",
+     "kind": "say",
+     "delivery": "Bitter and angry, voice lowered, fingers gripping the sheet edge."
+    }
+   },
+   {
+    "id": "1-2",
+    "scene": "roof",
+    "cast": [
+     "suye"
+    ],
+    "props": [
+     "tangerines"
+    ],
+    "seconds": 4,
+    "keyframe": "近景，平视。苏野站在画面右侧，脸朝画面左侧（姐姐所在方向），双手举着装着橘子的塑料袋，袋口微敞。",
+    "action": "Su Ye holds up the clear plastic bag of tangerines a little, eyes on Su Lan, jaw tight.",
+    "line": {
+     "who": "suye",
+     "text": "姐，我是来跟你道歉的。",
+     "kind": "say",
+     "delivery": "Voice a little tight, as if rehearsed many times."
+    }
+   },
+   {
+    "id": "2-1",
+    "scene": "roof",
+    "cast": [
+     "sulan"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "脸部大特写，苏岚的脸占画面约七成，肩膀基本不出画；她在画面左侧，脸朝画面右侧（画面外苏野的方向），眯着眼，嘴角向下撇，冷脸，不笑，不看镜头；背景是虚化的傍晚天台和晾着的床单。",
+    "action": "Extreme close-up of Su Lan's face only, head turned to frame right toward Su Ye off-screen, narrowed eyes, corners of mouth pulled down in a cold scoff, no smile, not looking at camera.",
+    "line": {
+     "who": "sulan",
+     "text": "道歉？晚了五年了啊。",
+     "kind": "say",
+     "delivery": "冷笑，带着鼻音"
+    }
+   },
+   {
+    "id": "2-2",
+    "scene": "roof",
+    "cast": [
+     "suye"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "近景，平视。苏野在画面右侧，脸朝画面左侧，把橘子袋放低了一点，肩膀松下来。",
+    "action": "Su Ye lowers the bag an inch, shoulders dropping; he keeps looking at her.",
+    "line": {
+     "who": "suye",
+     "text": "那时候，不敢回来见你。",
+     "kind": "say",
+     "delivery": "低，像在承认一件旧账"
+    }
+   },
+   {
+    "id": "2-3",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 4,
+    "keyframe": "中景，平视。苏岚在画面左侧，把白床单搭上右肩，背对着右侧的苏野顿了顿，又转回来脸朝画面右侧；苏野在画面右侧站着没动，橘子袋放在他脚边。",
+    "action": "Su Lan slings the sheet over her shoulder, turns her back to Su Ye for a beat, then turns back; Su Ye stands still, bag at his feet.",
+    "line": {
+     "who": "sulan",
+     "text": "不敢见我，橘子倒敢送。",
+     "kind": "say",
+     "delivery": "声音低了一点，嘴上仍硬"
+    }
+   },
+   {
+    "id": "3-1",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 4,
+    "keyframe": "中景，平视。风把晾着的白床单吹成鼓起的弧形，衣角扬起。苏野在画面右侧上前一步，脸朝画面左侧（苏岚所在方向），伸手按住床单角；苏岚在画面左侧没躲，两人的手在床单上碰到一起。两人都低头看交叠的手，谁都不看镜头。",
+    "action": "Wind blows the white sheet into a bulging arc, corner lifting; Su Ye steps in from the right and presses the corner, Su Lan stays at left; both look down at their joined hands on the cloth; nobody looks at the camera.",
+    "line": {
+     "who": "suye",
+     "text": "这次不搬走了。",
+     "kind": "say",
+     "delivery": "Muffled, determined."
+    }
+   },
+   {
+    "id": "3-2",
+    "scene": "roof",
+    "cast": [
+     "sulan"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "特写，平视。苏岚在画面左侧，脸朝画面右侧低着，视线落在两人交叠的手上，嘴唇抿住，眼尾有点红。",
+    "action": "Close on Su Lan's face turned down toward their joined hands; her lips press together, eyes wet but no tears.",
+    "line": {
+     "who": "sulan",
+     "text": "……还知道回来。",
+     "kind": "inner",
+     "delivery": "Inner voice, lips still."
+    }
+   },
+   {
+    "id": "3-3",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 4,
+    "keyframe": "中景，平视。苏岚在画面左侧把白床单从绳上整个解下来，双手抖开；苏野在画面右侧站着，手还扶着床单边，没退。",
+    "action": "Su Lan lifts the whole sheet off the line and shakes it open; Su Ye stands at right, hand still on the edge, not stepping back.",
+    "line": null
+   },
+   {
+    "id": "4-1",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 4,
+    "keyframe": "中景，平视。苏岚在画面左侧，脸朝画面右侧（苏野所在方向），把展开的床单一角递过去；苏野在画面右侧伸手来接，两只手隔着一截床单将碰未碰。",
+    "action": "Su Lan holds out a corner of the sheet toward Su Ye; he reaches for it; their fingers almost meet on the cloth.",
+    "line": {
+     "who": "sulan",
+     "text": "搭把手。",
+     "kind": "say",
+     "delivery": "Very short, voice softening, like half a sigh."
+    }
+   },
+   {
+    "id": "4-2",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "特写，平视。两双手在画面中间，把白床单折出第一道褶；苏岚的手在上，苏野的手在下托着。",
+    "action": "Close on the two pairs of hands folding the first crease of the sheet; her hand on top, his supporting underneath.",
+    "line": null
+   },
+   {
+    "id": "4-3",
+    "scene": "roof",
+    "cast": [
+     "sulan",
+     "suye"
+    ],
+    "props": [],
+    "seconds": 3,
+    "keyframe": "中景，平视。苏岚在画面左侧、苏野在画面右侧，并肩蹲着把床单折成一叠；苏岚脸朝画面右侧（苏野所在方向）低着，看手上的床单。天边的晚霞暗下去，晾衣绳空了。",
+    "action": "Side by side, they crouch and fold the sheet into a neat pile; the dusk light dims; the clothesline behind them is empty.",
+    "line": {
+     "who": "sulan",
+     "text": "风停了，再走。",
+     "kind": "say",
+     "delivery": "Very soft, as if saying it to herself."
+    }
+   }
+  ],
+  "segments": [
+   {
+    "shots": [
+     "1-1",
+     "1-2"
+    ]
+   },
+   {
+    "shots": [
+     "2-1",
+     "2-2",
+     "2-3"
+    ]
+   },
+   {
+    "shots": [
+     "3-1",
+     "3-2",
+     "3-3"
+    ]
+   },
+   {
+    "shots": [
+     "4-1",
+     "4-2",
+     "4-3"
+    ]
+   }
+  ]
+ }
+}
