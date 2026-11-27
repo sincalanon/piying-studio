@@ -109,6 +109,10 @@ DEFAULTS = {
     'setup_budget': SETUP_BUDGET_DEFAULT,   # yuan: the most a machine setup (machine-create) may cost
     # the page asks the registry (through the profile's pnpm) once a day whether a newer dsh-shisei exists; false: never
     'update_check': True,
+    # local mode (local_mode.py): the user's own ComfyUI instead of a compshare machine; empty = off
+    'comfy_url': '',            # e.g. http://127.0.0.1:8188
+    'comfy_dir': '',            # the ComfyUI folder (input/ output/ models/) when it is on this computer
+    'comfy_model_roots': [],    # more folders holding the model files, laid out like models/
 }
 
 # minutes per stage, measured on 4090 48G in the early experiments (boot is a rough estimate)
@@ -978,6 +982,12 @@ def machine_port(cfg, iid, save=True):
         save_config(disk)
         cfg['ports'] = ports
     return ports[iid]
+
+
+def comfy_base():
+    """Where this process talks to ComfyUI: the ssh tunnel's local port, or the user's own ComfyUI in local mode
+    (local_mode.py replaces this function)."""
+    return f'http://127.0.0.1:{LOCAL_PORT}'
 
 
 def use_machine(cfg, iid, save=True):
@@ -1951,6 +1961,10 @@ def cmd_config(args, cfg):
             value = float(value)
             if not 0 < value <= 100:
                 raise ShiseiError('setup_budget is yuan, 0..100')
+        if args.key == 'comfy_url' and value and not re.fullmatch(r'https?://[\w.-]+(:\d+)?/?', value):
+            raise ShiseiError('comfy_url is like http://127.0.0.1:8188 (empty turns local mode off)')
+        if args.key == 'comfy_model_roots':
+            value = [v.strip() for v in value.split(',') if v.strip()]
         if args.key not in DEFAULTS:
             raise ShiseiError(f'unknown key {args.key}; known: {", ".join(DEFAULTS)}')
         cfg[args.key] = value
@@ -2200,7 +2214,7 @@ def cmd_tunnel(args, cfg):
             if proc is not None and proc.poll() is not None:
                 raise ShiseiError(f'ssh tunnel exited ({proc.returncode}): port {LOCAL_PORT} taken, or ssh could not connect')
             try:
-                urllib.request.urlopen(f'http://127.0.0.1:{LOCAL_PORT}/system_stats', timeout=5)
+                urllib.request.urlopen(f'{comfy_base()}/system_stats', timeout=5)
                 return True
             except Exception:
                 time.sleep(2)
@@ -2221,13 +2235,13 @@ def cmd_tunnel(args, cfg):
     global TUNNEL_CFG
     TUNNEL_CFG = cfg
     if up:
-        return {'tunnel': f'http://127.0.0.1:{LOCAL_PORT}'}
+        return {'tunnel': f'{comfy_base()}'}
     # ComfyUI not running on the machine (it died after boot): start it again, on 127.0.0.1 only, and wait for it
     out = ssh_run(cfg, info, REMOTE_COMFY_ENSURE, check=False, timeout=240)
     if 'restarted' in out:
         log('ComfyUI was not running on the machine; started it again')
     if '127.0.0.1:8188' in out and answers(15):
-        return {'tunnel': f'http://127.0.0.1:{LOCAL_PORT}'}
+        return {'tunnel': f'{comfy_base()}'}
     raise ShiseiError('tunnel opened but ComfyUI does not answer')
 
 
@@ -2246,7 +2260,7 @@ TUNNEL_CFG = None   # the config of the tunnel this process opened: a send that 
 
 def post_prompt(api, reopen=True):
     body = json.dumps({'prompt': api, 'client_id': client_id()}).encode()
-    req = urllib.request.Request(f'http://127.0.0.1:{LOCAL_PORT}/prompt', body, {'Content-Type': 'application/json'})
+    req = urllib.request.Request(f'{comfy_base()}/prompt', body, {'Content-Type': 'application/json'})
     try:
         return json.load(urllib.request.urlopen(req, timeout=30))['prompt_id']
     except urllib.error.HTTPError as e:
@@ -2257,7 +2271,7 @@ def post_prompt(api, reopen=True):
             log('tunnel dropped before sending, reopening')
             cmd_tunnel(argparse.Namespace(close=False), TUNNEL_CFG)
             return post_prompt(api, reopen=False)
-        raise ShiseiError(f'ComfyUI not reachable on 127.0.0.1:{LOCAL_PORT}; open the tunnel first ({getattr(e, "reason", e)})')
+        raise ShiseiError(f'ComfyUI not reachable on {comfy_base()}; open the tunnel first ({getattr(e, "reason", e)})')
 
 
 def load_workflow(name):
@@ -2328,7 +2342,7 @@ def schedule_stop(cfg, at, from_keeper=False):
 
 
 def history(pid):
-    d = json.load(urllib.request.urlopen(f'http://127.0.0.1:{LOCAL_PORT}/history/{pid}', timeout=20))
+    d = json.load(urllib.request.urlopen(f'{comfy_base()}/history/{pid}', timeout=20))
     return d.get(pid)
 
 
@@ -6057,7 +6071,7 @@ def _object_info_missing(classes):
     missing = []
     for c in classes:
         try:
-            d = json.load(urllib.request.urlopen(f'http://127.0.0.1:{LOCAL_PORT}/object_info/{c}', timeout=20))
+            d = json.load(urllib.request.urlopen(f'{comfy_base()}/object_info/{c}', timeout=20))
         except (urllib.error.URLError, socket.timeout) as e:
             raise ShiseiError(f'ComfyUI not reachable for preflight: {e}')
         if c not in d:
@@ -8728,6 +8742,10 @@ def cmd_drama_cut(args, cfg):
             'label': 'AI 生成（烧入画面）' if burn else 'AI 生成（只在文件元数据里）'}
 
 
+def local_mode_wanted(cfg):
+    return bool(os.environ.get('SHISEI_COMFY_URL') or cfg.get('comfy_url'))
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog='shisei.py', description=__doc__.split('\n')[0])
     p.add_argument('--machine', help='instance id to use (default: the one this project leases, else the preferred one)')
@@ -9180,6 +9198,13 @@ def main(argv=None):
         if getattr(args, 'confirm_billing', False):
             keep_awake()   # a billed run: the computer sleeping would cut the connection while the machine bills
         cfg = load_config()
+        if local_mode_wanted(cfg):   # the user's own ComfyUI instead of a compshare machine (local_mode.py)
+            import importlib.util
+            spec = importlib.util.spec_from_file_location('shisei_local_mode', HERE / 'local_mode.py')
+            lm = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(lm)
+            lm.install(globals(), cfg)
+            handler = globals()['cmd_' + args.cmd.replace('-', '_')]   # the local version of the command
         # a qualify dry run is a plan from numbers alone: it takes no machine and contacts nothing
         dry_qualify = args.cmd == 'gpu-qualify' and not args.confirm_billing
         if (args.cmd in LEASE_CMDS or args.cmd in ATTACH_CMDS) and not dry_qualify:
