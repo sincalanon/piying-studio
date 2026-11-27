@@ -35,3 +35,7 @@ own licenses. Read them before commercial use.
 Test fixtures under test/fixtures/release/ (AI-generated character reference images used only for release
 testing) are not part of the npm package. Inputs listed there as local (a Pexels dance clip, a reference film)
 are never committed; inputs.json records only their source and sha256.
+
+Modifications (Piying Studio, 2026): added skills/shisei-motion/scripts/local_mode.py, LOCAL_MODE.md and
+README.piying.md; changed skills/shisei-motion/scripts/shisei.py to support a user-run ComfyUI (comfy_url,
+comfy_dir, comfy_model_roots). Based on dsh-shisei 0.2.2 by wquguru.
