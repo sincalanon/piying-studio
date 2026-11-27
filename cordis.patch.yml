@@ -1,4 +1,4 @@
-# Mount the Shisei skill provider. It needs the skill registry (ctx.skills),
+# Mount the Piying skill provider. It needs the skill registry (ctx.skills),
 # which every dsh profile built on @deepseek-ai/dsh-base already has.
 - insert:
     - id: dsh-shisei

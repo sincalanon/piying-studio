@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shisei Motion command line: dance video -> mannequin -> fictional character on your own compshare GPU.
+"""Piying Motion command line: dance video -> mannequin -> fictional character on your own compshare GPU.
 
 Every command prints one JSON object on stdout ({"ok": true, ...} or {"ok": false, "error": ...}).
 Progress goes to stderr. Secrets are read from the environment and never printed.
@@ -144,7 +144,7 @@ def log(msg):
 
 # ---------------------------------------------------------------- config
 
-# library_dir: a local clone of the Shisei library, before the page read it online (lib/library.js)
+# library_dir: a local clone of the Piying library, before the page read it online (lib/library.js)
 RETIRED_KEYS = ('library_dir',)
 
 
@@ -492,7 +492,7 @@ def composite_args(chrome, source, mannequin, character, out, frames=H3_FRAMES, 
     return ['ffmpeg', '-v', 'error', '-y', '-loop', '1', '-i', str(chrome), '-i', str(source), '-i', str(mannequin),
             '-i', str(character), '-filter_complex', ';'.join(parts), '-map', '[out]',
             '-frames:v', str(n * (extra + 1)), '-r', str(FPS), '-c:v', 'libx264', '-crf', '16', '-pix_fmt', 'yuv420p',
-            '-metadata', 'comment=AI-generated (Shisei)', str(out)]
+            '-metadata', 'comment=AI-generated (Piying)', str(out)]
 
 
 DUO_PANEL = (950, 1080)   # each half of the 1920x1080 two-panel cut (10 px margins left and right)
@@ -510,7 +510,7 @@ def composite_two_args(source, character, out, frames=H3_FRAMES, loops=None):
     parts.append(f'[v0][v1]hstack=inputs=2,pad=1920:1080:(ow-iw)/2:0:color=0x14171c[out]')
     return ['ffmpeg', '-v', 'error', '-y', '-i', str(source), '-i', str(character), '-filter_complex', ';'.join(parts),
             '-map', '[out]', '-frames:v', str(n * (extra + 1)), '-r', str(FPS), '-c:v', 'libx264', '-crf', '16',
-            '-pix_fmt', 'yuv420p', '-metadata', 'comment=AI-generated (Shisei)', str(out)]
+            '-pix_fmt', 'yuv420p', '-metadata', 'comment=AI-generated (Piying)', str(out)]
 
 
 def job_composite_args(d, job, pick, frames):
@@ -610,7 +610,7 @@ def _cs_once(*args, sensitive=False):
     elif os.environ.get('DSH_SHISEI_BRIDGE'):
         stdout, stderr = via_bridge(argv)
     else:
-        raise ShiseiError('compshare keys not available: set them in the dsh plugin page (Shisei), '
+        raise ShiseiError('compshare keys not available: set them in the dsh plugin page (Piying), '
                           'or export COMPSHARE_PUBLIC_KEY / COMPSHARE_PRIVATE_KEY')
     try:
         out = json.loads(stdout)
@@ -643,7 +643,7 @@ def instance_state(cfg):
 
 
 def instance_fit(info):
-    """Whether an instance can run Shisei (H3 needs a 48 GB card), from its GpuType such as '4090_48G'.
+    """Whether an instance can run Piying (H3 needs a 48 GB card), from its GpuType such as '4090_48G'.
     Returns (suitable, why) — why is a short Chinese reason shown on the settings page."""
     gpu = str((info or {}).get('GpuType') or '')
     if not gpu:
@@ -654,7 +654,7 @@ def instance_fit(info):
     vram = GPU_VRAM_GB.get(gpu) or (int(m.group(1)) if m else None)
     if vram is not None and vram < 48:
         return False, '显存不够：H3 换人要 48G'
-    return False, '这种显卡 Shisei 还没验证过'
+    return False, '这种显卡皮影还没验证过'
 
 
 def pick_instance(rows, current):
@@ -741,7 +741,7 @@ def ssh_cmd(name, env=None, node=None, exists=os.path.exists, key=None):
             return [ssh_tool(name)]
         except ShiseiError:
             raise ShiseiError(f'the ssh key {Path(key).name} has a passphrase, which the plugin\'s own ssh cannot use, and this '
-                              'computer has no OpenSSH: pick a key without a passphrase in Settings, or let the Shisei page '
+                              'computer has no OpenSSH: pick a key without a passphrase in Settings, or let the Piying page '
                               'make one (开始 › GPU 机器)')
     if env.get('SHISEI_SSH') != 'system' and exists(str(SSH_JS)):
         node = node or node_bin(env)
@@ -779,7 +779,7 @@ def cmd_ssh_keygen(args, cfg):
     """Make the plugin's own ssh key pair (no passphrase, only for the user's GPU machines) when this computer has none.
     Never touches ~/.ssh and never replaces a key. The user clicks for it on the page; not from the director shell."""
     if in_agent_shell():
-        raise ShiseiError('the ssh key is made by the user on the Shisei page (开始 › GPU 机器), not from the director shell')
+        raise ShiseiError('the ssh key is made by the user on the 皮影 page (开始 › GPU 机器), not from the director shell')
     path = key_to_make(cfg)
     if not path:
         key = resolve_ssh_key(cfg)
@@ -822,7 +822,7 @@ def make_own_key(path):
 
 
 def cmd_instances(args, cfg):
-    """The instances in this compshare account, with which can run Shisei. Read-only: never starts or stops anything.
+    """The instances in this compshare account, with which can run Piying. Read-only: never starts or stops anything.
     --pick: when no instance is set and exactly one is suitable, remember it (config instance_id)."""
     rows = []
     making = setup_making()   # a machine 开始 is still setting up is not offered (nor picked) until it is ready
@@ -860,14 +860,14 @@ def cmd_instances(args, cfg):
 
 
 def register_machine(cfg, known, add=None, remove=None):
-    """Add or remove an instance from the machines Shisei may use. Only the registry changes, never the instance."""
+    """Add or remove an instance from the machines Piying may use. Only the registry changes, never the instance."""
     disk = load_config()
     machines = [m for m in disk.get('machines') or [] if m]
     if add:
         if add not in known:
             raise ShiseiError(f'{add} is not an instance of this compshare account')
         if isinstance(known, dict) and not known[add]:
-            raise ShiseiError(f'{add} cannot run Shisei (H3 needs a 48 GB card); not registered')
+            raise ShiseiError(f'{add} cannot run Piying (H3 needs a 48 GB card); not registered')
         if add != disk.get('instance_id') and add not in machines:
             machines.append(add)
         if not disk.get('instance_id'):
@@ -1106,7 +1106,7 @@ def lease_may_stop(iid, holder, force=False):
     cur = lease_read(iid)
     if lease_held(cur) and cur.get('holder') != holder and not force:
         raise MachineBusy(busy_message(iid, cur) + ' Stopping it would cut that run off; the user can do it on '
-                          'the Shisei page (machines), which asks first.')
+                          'the Piying page (machines), which asks first.')
     return cur
 
 
@@ -1134,7 +1134,7 @@ def other_run_message(iid, lease):
     what = {'drama-trial': 'a trial', 'drama-run': 'a run', 'job-run': 'a run', 'up': 'up'}.get(lease.get('cmd'), 'a run')
     since = time.strftime('%H:%M', time.localtime(float(lease.get('since') or time.time())))
     return (f'this project already has {what} on machine {iid} (started {since}, still going). '
-            'One run per project at a time: wait for it to end, or stop it on the Shisei page.')
+            'One run per project at a time: wait for it to end, or stop it on the Piying page.')
 
 
 def own_run_elsewhere(holder, ids, now=None):
@@ -1595,7 +1595,7 @@ def ssh_base(cfg, info, scp=False):
     host, port = ssh_endpoint(info)
     key = resolve_ssh_key(cfg)
     if not key or not Path(key).exists():
-        raise ShiseiError('no ssh key: none of ~/.ssh/id_ed25519, id_rsa, id_ecdsa exists; make one on the Shisei page '
+        raise ShiseiError('no ssh key: none of ~/.ssh/id_ed25519, id_rsa, id_ecdsa exists; make one on the Piying page '
                           '(开始 › GPU 机器, or 设置), or run: shisei.py ssh-keygen')
     HOME.mkdir(parents=True, exist_ok=True)
     # BatchMode: never ask for a password. A machine without our key offers password login; with no terminal ssh on macOS
@@ -1730,7 +1730,7 @@ def do_secure(cfg, info):
 # source) and compares. An old, missing or drifted environment is a warning on `up` (the machine is already billing,
 # so refusing would only leave it running), a problem in gpu-qualify, and a failure at the end of machine-create.
 SHISEI_ENV = 1          # must equal SHISEI_ENV in assets/image/setup.sh (test_shisei checks)
-PUBLIC_IMAGES = {1: 'compshareImage-1xnjxhnxyr75'}   # env -> public community image id (docs/IMAGE.md); env 1: 「Shisei AI短剧换角 4090」, free
+PUBLIC_IMAGES = {1: 'compshareImage-1xnjxhnxyr75'}   # env -> public community image id (docs/IMAGE.md); env 1: 「皮影 AI短剧换角 4090」, free
 REMOTE_ENV = 'cat /root/.shisei/env.json 2>/dev/null || echo "{}"'
 
 
@@ -1754,11 +1754,11 @@ def env_report(env, manifest):
     if not isinstance(env, dict) or not isinstance(env.get('env'), int):
         return {'state': 'missing', 'have': None, 'want': want, 'problems': [],
                 'hint': 'This machine has no environment version (set up before versions, or setup.sh did not finish). '
-                        'Update its environment (Shisei page › 机器 › 更新环境, which reruns setup.sh) to be sure it matches this plugin.'}
+                        'Update its environment (皮影 page › 机器 › 更新环境, which reruns setup.sh) to be sure it matches this plugin.'}
     have = env['env']
     if have < want:
         return {'state': 'old', 'have': have, 'want': want, 'problems': [],
-                'hint': f'This machine has environment {have}; this plugin expects {want}. Update its environment (Shisei page › 机器 › 更新环境).'}
+                'hint': f'This machine has environment {have}; this plugin expects {want}. Update its environment (皮影 page › 机器 › 更新环境).'}
     if have > want:
         return {'state': 'newer', 'have': have, 'want': want, 'problems': [],
                 'hint': f'This machine has environment {have}, newer than this plugin knows ({want}). Update the plugin.'}
@@ -1769,7 +1769,7 @@ def env_report(env, manifest):
                      for k, v in manifest[kind].items() if got.get(k) != v]
     if problems:
         return {'state': 'drift', 'have': have, 'want': want, 'problems': problems,
-                'hint': 'The machine says environment %d but differs from it; update its environment (Shisei page › 机器 › 更新环境).' % have}
+                'hint': 'The machine says environment %d but differs from it; update its environment (皮影 page › 机器 › 更新环境).' % have}
     return {'state': 'current', 'have': have, 'want': want, 'problems': [], 'hint': None}
 
 
@@ -2405,7 +2405,7 @@ def cmd_down(args, cfg):
         return {'needs_confirmation': True, 'message': 'Pull and check outputs first, then rerun with --yes.'}
     force = bool(getattr(args, 'force_other', False))   # only the page's machine-stop, after it asked
     if force and in_agent_shell():
-        raise ShiseiError('stopping a machine another project is using is done by the user on the Shisei page, '
+        raise ShiseiError('stopping a machine another project is using is done by the user on the Piying page, '
                           'not from the director shell')
     iid = need_instance(cfg)
     holder = HOLDER or 'cli'
@@ -3073,7 +3073,7 @@ def cmd_job_run(args, cfg):
         # the second picture: the face close-up of the one character, or the right-hand person's full body
         second = 'front2' if swap_people(params) == 2 else 'face'
         if not files.get('front') or not files.get(second):
-            raise ShiseiError('a reference picture is missing; add it on the Shisei page first')
+            raise ShiseiError('a reference picture is missing; add it on the Piying page first')
         refs = ['front' + Path(files['front']).suffix, second + Path(files[second]).suffix]
         ups = [(d / 'dance.mp4', 'dance.mp4'), (d / files['front'], refs[0]), (d / files[second], refs[1])]
         if not keep_bg and (d / 'mannequin.mp4').exists():
@@ -3381,7 +3381,7 @@ def new_job_id():
 
 
 def cmd_job_new(args, cfg):
-    """Create a job folder like the GUI does (copy inputs, trim the clip), so agent runs show up in the Shisei page."""
+    """Create a job folder like the GUI does (copy inputs, trim the clip), so agent runs show up in the Piying page."""
     people = 2 if getattr(args, 'people', 1) == 2 else 1
     second = ('front2', getattr(args, 'front2', None)) if people == 2 else ('face', args.face)
     if not second[1]:
@@ -3437,7 +3437,7 @@ DRAMA_IMAGE_SIZE = (864, 1536)      # keyframes and scenes, 9:16; Qwen output is
 DRAMA_PORTRAIT_SIZE = (1024, 1536)
 DRAMA_SEEDS = (1001, 2002, 3003, 4004, 5005)
 DRAMA_STAGES = ('assets', 'keyframes', 'takes')
-DEFAULT_BUDGET = 5.0     # yuan per project; the user changes it on the Shisei page (job.json params.budget)
+DEFAULT_BUDGET = 5.0     # yuan per project; the user changes it on the Piying page (job.json params.budget)
 MAX_UNIT_SECONDS = 12      # one H3 generation; 10 s measured on the 4090 (155 s at 576p), 12 s is the tested ceiling
 LINE_KINDS = {'say': '说', 'inner': '内心独白', 'vo': '画外音'}
 FRAMING_EN = [('特写', 'Extreme close-up'), ('中近景', 'Medium close-up'), ('近景', 'Close-up'), ('中景', 'Medium shot'),
@@ -3558,7 +3558,7 @@ def is_young(cast):
 def exposure_problem(text, young=False):
     """Why this prompt field may not be drawn, or '' when it is fine.
 
-    Nudity and sex are refused for every character: a Shisei picture is a drama still, not adult content. The
+    Nudity and sex are refused for every character: a Piying picture is a drama still, not adult content. The
     milder wardrobe words are refused only for someone young or in a field that itself mentions a minor — that is
     the 未成年性化 rule. Called on `look` / `outfit` / `voice` / `keyframe` / `action` / `state` only: the script
     and a line are never prompts (docs/SAFETY.md)."""
@@ -3611,7 +3611,7 @@ def validate_story(story):
         if not re.fullmatch(r"[A-Za-z][A-Za-z .'-]{0,39}", str(c.get('name_en', ''))):
             errs.append(f'cast {c.get("id")}: name_en (the English name used in action) is missing or not plain letters')
         if 'look_young' in c and not isinstance(c['look_young'], bool):
-            errs.append(f'cast {c.get("id")}: look_young is true or false (the user sets it on the Shisei page)')
+            errs.append(f'cast {c.get("id")}: look_young is true or false (the user sets it on the Piying page)')
         if 'outfit' in c and not (isinstance(c['outfit'], str) and 0 < len(c['outfit'].strip()) <= 300):
             errs.append(f'cast {c.get("id")}: outfit is one line of at most 300 characters')
         if 'outfit_ref' in c:
@@ -3619,17 +3619,17 @@ def validate_story(story):
             if not (isinstance(ref, dict) and re.fullmatch(rf'{WARDROBE_DIR}/{cid}_[0-9a-f]{{12}}\.png', str(ref.get('file', '')))
                     and re.fullmatch(rf'cast_{cid}_face\.v\d+\.png', str(ref.get('face', '')))
                     and re.fullmatch(r'library:[A-Z]\d{3}|upload:u\d{8}-\d{6}-[0-9a-f]{4}', str(ref.get('source', '')))):
-                errs.append(f'cast {c.get("id")}: outfit_ref is written by drama-wardrobe --picture only (the user, on the Shisei page)')
+                errs.append(f'cast {c.get("id")}: outfit_ref is written by drama-wardrobe --picture only (the user, on the Piying page)')
         if 'photo_ref' in c:
             ref = c['photo_ref']
             if not (isinstance(ref, dict) and ref.get('file') == photo_file(c.get('id', ''))
                     and re.fullmatch(r'[0-9a-f]{64}', str(ref.get('sha', '')))):
-                errs.append(f'cast {c.get("id")}: photo_ref is written by series-cast-new only (the user, on the Shisei page)')
+                errs.append(f'cast {c.get("id")}: photo_ref is written by series-cast-new only (the user, on the Piying page)')
         if 'voice_ref' in c:
             ref = c['voice_ref']
             if not (isinstance(ref, dict) and ref.get('file') == voice_file(c.get('id', ''))
                     and re.fullmatch(r'[0-9a-f]{64}', str(ref.get('sha', '')))):
-                errs.append(f'cast {c.get("id")}: voice_ref is written by drama-voice only (the user, on the Shisei page)')
+                errs.append(f'cast {c.get("id")}: voice_ref is written by drama-voice only (the user, on the Piying page)')
     if not story.get('cast'):
         errs.append('cast is empty')
     if not story.get('scenes'):
@@ -3702,7 +3702,7 @@ def validate_story(story):
                 except ShiseiError:
                     ok = False
             if not ok:
-                errs.append(f'shot {sid}: crop is written by drama-crop only (the user, on the Shisei page): a cut of this '
+                errs.append(f'shot {sid}: crop is written by drama-crop only (the user, on the Piying page): a cut of this '
                             "segment's own earlier first frame, of someone in the shot")
         line = sh.get('line')
         if line:
@@ -4330,7 +4330,7 @@ def voice_from_upload(src, folder, cid):
     """The uploaded recording as a temp wav in `folder` (.voice_<cid>.cut.wav), checked; the upload itself is removed."""
     src, folder = Path(src), Path(folder)
     if src.parent.resolve() != folder.resolve() or not VOICE_UPLOAD_RE.fullmatch(src.name) or not src.is_file():
-        raise ShiseiError('--upload is the recording the Shisei page saved (.voice_upload.<ext> in the same folder)')
+        raise ShiseiError('--upload is the recording the Piying page saved (.voice_upload.<ext> in the same folder)')
     try:
         r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=codec_type',
                             '-of', 'csv=p=0', str(src)], capture_output=True, text=True, timeout=60)
@@ -4606,23 +4606,23 @@ def in_agent_shell(env=None):
     return bool((os.environ if env is None else env).get('DSH_SHISEI_BRIDGE'))
 
 
-# Starting a paid run is the user's click on the Shisei page: its dialog names the GPU, zone and price and takes the
+# Starting a paid run is the user's click on the Piying page: its dialog names the GPU, zone and price and takes the
 # lease. From a model shell (the director, a dsh chat) --confirm-billing is refused before anything is written, so the
 # model quotes and points at the button instead of starting a machine, asking for wider sandbox access, or failing
 # half-way on a lease it may not write (2026-11-12).
-BILLING_IS_THE_USERS = ('starting the GPU is the user\'s click on the Shisei page, not a model shell\'s: nothing was started. '
+BILLING_IS_THE_USERS = ('starting the GPU is the user\'s click on the Piying page, not a model shell\'s: nothing was started. '
                         'Tell the user the price (drama-estimate / job-estimate / up without --confirm-billing) and point them '
                         'to the button: the project page\'s bottom bar or its suggested next steps; for a recast, its '
                         '"Next: confirm GPU start"; for a new machine, the Start page.')
 
 
 def user_only(kind, value, agent):
-    """Approving a picture and picking a take belong to the user (they click on the Shisei page). From a model shell
+    """Approving a picture and picking a take belong to the user (they click on the Piying page). From a model shell
     these are refused; reject / pending stay open so the director can record what the user said. A guardrail, not a
     lock: whoever can edit review.json can get around it."""
     if agent and (kind == 'pick' or value == 'pass'):
         what = 'picking a take' if kind == 'pick' else 'approving a picture'
-        raise ShiseiError(f'{what} is done by the user on the Shisei page, not from the director shell. '
+        raise ShiseiError(f'{what} is done by the user on the Piying page, not from the director shell. '
                           'To suggest a take run: drama-recommend <dir> <segment> <take number> --why "reason"')
 
 
@@ -4751,7 +4751,7 @@ def budget_check(budget, cost, swap=False):
     if over > 0:
         fewer = 'Remake: make fewer takes this time' if swap else 'Make fewer takes (--seeds 1) or fewer segments (--shots)'
         raise ShiseiError(f'over the project budget: spent ¥{budget["spent"]:.2f} + this run ≈ ¥{cost:.2f} is ¥{over:.2f} above the cap '
-                          f'¥{budget["cap"]:g}. {fewer}, or ask the user to raise the cap on the Shisei page (only the user changes it).')
+                          f'¥{budget["cap"]:g}. {fewer}, or ask the user to raise the cap on the Piying page (only the user changes it).')
 
 
 def plan_blockers(story, review, stage, shots=None):
@@ -5017,7 +5017,7 @@ def cut_args(clips, label, out, width, subs=None, durs=None, bed=None, voices=()
     if subs:
         args += ['-map', f'{sub_index}:s', '-c:s', 'mov_text', '-metadata:s:s:0', 'language=chi']
     args += ['-c:v', 'libx264', '-crf', '18', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart',
-             '-metadata', 'comment=AI-generated (Shisei)', str(out)]
+             '-metadata', 'comment=AI-generated (Piying)', str(out)]
     return args
 
 
@@ -5109,7 +5109,7 @@ def strip_user_fields(story):
 
 
 def merge_user_fields(old, story):
-    """What the director's drama-set cannot drop: `look_young` (only the user turns it off, on the Shisei page),
+    """What the director's drama-set cannot drop: `look_young` (only the user turns it off, on the Piying page),
     `origin` (where an asset was brought in from), and the two picture instructions the user gave: a shot's `crop`
     (kept while the shot is still the first of its segment and still shows that person) and a character's `outfit_ref`
     (kept while look and outfit text are unchanged; rewriting either means new clothes from words).
@@ -5466,7 +5466,7 @@ def check_entry(kind, entry):
 @locks_review
 def cmd_drama_adopt(args, cfg):
     """Bring a cast member, scene or prop into this project: from another project (--from-job, its pictures are copied),
-    or a picture from the Shisei library or the user's uploads (--image, scene or prop only). The new entry gets an id
+    or a picture from the Piying library or the user's uploads (--image, scene or prop only). The new entry gets an id
     nothing here uses and `origin`; its pictures arrive unreviewed, so nothing is shot from them until the user
     approves them in this project. Same source twice returns the entry already made. Without a story yet the entry
     waits in adopted.json for the director to write it into story.json."""
@@ -5492,7 +5492,7 @@ def cmd_drama_adopt(args, cfg):
         if in_agent_shell():
             # every outside picture is confirmed by the user when it is imported (rights, what it is);
             # the director can mention library items and uploads, and the page copies them in
-            raise ShiseiError('pictures from the library or uploads are brought in by the Shisei page (the user confirms each one); '
+            raise ShiseiError('pictures from the library or uploads are brought in by the Piying page (the user confirms each one); '
                               'mention them with @ instead')
         if not args.image or not (args.name or '').strip() or not (args.look or '').strip():
             raise ShiseiError('--image, --name and --look are needed (look: what the picture shows, used if it is redrawn)')
@@ -5541,7 +5541,7 @@ def cmd_drama_adopt(args, cfg):
     review = load_review(d)
     if any(review['assets'].pop(f, None) is not None for f in files):
         save_json_atomic(d / 'review.json', review)   # a stale verdict under the new name is not an approval
-    where = f'《{origin.get("title")}》' if origin['kind'] == 'project' else 'Shisei 素材库' if origin['kind'] == 'library' else '我的上传'
+    where = f'《{origin.get("title")}》' if origin['kind'] == 'project' else '皮影素材库' if origin['kind'] == 'library' else '我的上传'
     if story is not None:
         apply_story(d, story, new, f'从{where}带进来 {entry.get("name", nid)}')
     else:
@@ -5577,9 +5577,9 @@ def _read_picture(path, what):
 def wardrobe_picture(src, image, cfg, home=None):
     """The clothes picture behind --source, checked: {'path', 'type', 'sha256'}.
     upload:<id>  the file in ~/.dsh/shisei/uploads, with the confirmation the user gave for this very picture when it
-                 was imported (<id>.json, written by the Shisei page): it is clothes, the user may use it, and the
+                 was imported (<id>.json, written by the Piying page): it is clothes, the user may use it, and the
                  bytes still have the recorded checksum. Anything missing: refused.
-    library:<id> `image` is the file the page found through the catalogue; it must lie in the configured Shisei
+    library:<id> `image` is the file the page found through the catalogue; it must lie in the configured Piying
                  library checkout (public, rating general) or the plugin's cache of it."""
     home = Path(home) if home is not None else HOME
     if src.startswith('upload:'):
@@ -5592,7 +5592,7 @@ def wardrobe_picture(src, image, cfg, home=None):
             rec = None
         conf = (rec or {}).get('confirmed') if isinstance(rec, dict) else None
         if not (isinstance(conf, dict) and rec.get('id') == uid and conf.get('rights') is True):
-            raise ShiseiError('this upload has no confirmation record: the user imports and confirms each picture on the Shisei page '
+            raise ShiseiError('this upload has no confirmation record: the user imports and confirms each picture on the Piying page '
                               '(the right to use it) before it can be used')
         if rec.get('kind') != 'clothes':
             raise ShiseiError('this upload was not confirmed as clothes')
@@ -5604,10 +5604,10 @@ def wardrobe_picture(src, image, cfg, home=None):
             raise ShiseiError('the uploaded picture is not the one the user confirmed (checksum differs): import it again')
         return {'path': path, 'type': fmt, 'sha256': sha}
     if not image:
-        raise ShiseiError('library clothes as a picture need --image <file in the Shisei library cache>')
+        raise ShiseiError('library clothes as a picture need --image <file in the Piying library cache>')
     # the page downloads a library picture into ~/.dsh/shisei/library (lib/library.js cacheLibImage) before calling this
     if not _inside(image, [home / 'library']):
-        raise ShiseiError('--image is not inside the Shisei library cache (~/.dsh/shisei/library)')
+        raise ShiseiError('--image is not inside the Piying library cache (~/.dsh/shisei/library)')
     fmt, sha = _read_picture(image, '--image')
     return {'path': Path(image), 'type': fmt, 'sha256': sha}
 
@@ -5635,15 +5635,15 @@ def cmd_drama_wardrobe(args, cfg):
     if not (src == 'text' or re.fullmatch(r'library:[A-Z]\d{3}', src) or re.fullmatch(r'upload:' + UPLOAD_ID_RE.pattern, src)):
         raise ShiseiError('--source is text, library:C123 or upload:<id>')
     if picture and in_agent_shell():
-        raise ShiseiError('redrawing a character from a picture is started by the user on the Shisei page, not from the director shell')
+        raise ShiseiError('redrawing a character from a picture is started by the user on the Piying page, not from the director shell')
     if c.get('look_young') and in_agent_shell():
-        raise ShiseiError(f'{c["name"]} is marked as looking young: only the user changes her clothes, on the Shisei page '
+        raise ShiseiError(f'{c["name"]} is marked as looking young: only the user changes her clothes, on the Piying page '
                           '(which offers only library clothes that are not more revealing)')
     if c.get('look_young') and picture:
         raise ShiseiError(f'{c["name"]} is marked as looking young: no redraws from a picture for this character '
                           '(library clothes the page offers can still go on as words)')
     if c.get('look_young') and not src.startswith('library:'):
-        raise ShiseiError(f'{c["name"]} is marked as looking young: only clothes the Shisei page offers from the library '
+        raise ShiseiError(f'{c["name"]} is marked as looking young: only clothes the Piying page offers from the library '
                           '(never more revealing ones) can go on this character')
     if picture and src == 'text':
         raise ShiseiError('--picture needs --source upload:<id> or library:<id>')
@@ -5756,10 +5756,10 @@ def cmd_drama_ref(args, cfg):
 
 
 def cmd_drama_cast_flag(args, cfg):
-    """The user marks a character as looking young (or takes the mark off) on the Shisei page. It does not change any
+    """The user marks a character as looking young (or takes the mark off) on the Piying page. It does not change any
     picture; it limits what can be done to the character: no more revealing clothes, no low angles above the knee."""
     if in_agent_shell():
-        raise ShiseiError('「看起来年轻」 is set by the user on the Shisei page, not from the director shell')
+        raise ShiseiError('「看起来年轻」 is set by the user on the Piying page, not from the director shell')
     d, _ = drama_dir(args.jobdir)
     story = load_story(d)
     c = next((x for x in story['cast'] if x['id'] == args.cast), None)
@@ -5934,7 +5934,7 @@ def sent_back_unchanged(story, review, kind, key):
 
 def cmd_drama_recommend(args, cfg):
     """The director's suggestion for which take to use, with a reason. Writes recommend.json only, never review.json:
-    a take enters the cut when the user clicks it on the Shisei page."""
+    a take enters the cut when the user clicks it on the Piying page."""
     d, _ = drama_dir(args.jobdir)
     story = load_story(d)
     u = next((x for x in units(story) if args.unit in (x['id'], x['label'])), None)
@@ -5952,7 +5952,7 @@ def cmd_drama_recommend(args, cfg):
         rec[u['id']] = {'seed': seed, 'take': take_number(seed), 'why': why[:200], 'at': time.time()}
     save_json_atomic(d / 'recommend.json', rec)
     return {'unit': u['id'], 'label': u['label'], 'recommend': rec.get(u['id']),
-            'note': 'a suggestion only: the take is used when the user clicks it on the Shisei page'}
+            'note': 'a suggestion only: the take is used when the user clicks it on the Piying page'}
 
 
 def cmd_drama_budget(args, cfg):
@@ -6129,7 +6129,7 @@ def stage_prepare(d, story, stage, todo):
             young = [c['name'] for c in story['cast'] if c['id'] in (sh.get('cast') or []) and c.get('look_young')]
             if young:
                 raise ShiseiError(f'{"、".join(young)} is marked as looking young: no close-up cuts. The user removes the crop '
-                                  f'of shot {sh["id"]} on the Shisei page (drama-crop --clear)')
+                                  f'of shot {sh["id"]} on the Piying page (drama-crop --clear)')
             src = d / cr['source']
             if not src.is_file():
                 raise ShiseiError(f'the picture the close-up of shot {sh["id"]} is cut from is gone ({cr["source"]}): '
@@ -6145,7 +6145,7 @@ def stage_prepare(d, story, stage, todo):
                 continue
             if c.get('look_young'):
                 raise ShiseiError(f'{c["name"]} is marked as looking young: no redraws from a picture. The user changes the '
-                                  'clothes again on the Shisei page (library clothes, as words)')
+                                  'clothes again on the Piying page (library clothes, as words)')
             gone = [x for x in (ref['face'], ref['file']) if not (d / x).is_file()]
             if gone:
                 raise ShiseiError(f'{c["name"]}: pictures for the redraw are gone ({", ".join(gone)}): change the clothes again')
@@ -6724,7 +6724,7 @@ STUDY_SRC = 'study_src'            # study_src.<ext>: the video as the page uplo
 STUDY_EXTS = ('mp4', 'mov', 'webm', 'm4v')
 STUDY_MAX_SECONDS = 180
 STUDY_MIN_SHOT = 0.4               # cuts closer than this are flashes, not shots
-STUDY_THRESHOLD = 10.0             # ffmpeg scdet score: 10 found every segment boundary of a 40 s Shisei cut, 15 missed two
+STUDY_THRESHOLD = 10.0             # ffmpeg scdet score: 10 found every segment boundary of a 40 s Piying cut, 15 missed two
 STUDY_LOOK = {
     'framing': ('特写', '近景', '中景', '全景', '远景'),
     'move': ('固定', '推', '拉', '摇', '跟', '手持'),
@@ -7074,11 +7074,11 @@ def cmd_ffmpeg_check(args, cfg):
 
 
 def cmd_ffmpeg_install(args, cfg):
-    """Install (or update) ffmpeg with Homebrew / winget. The user's click on the Shisei page: refused in the director
+    """Install (or update) ffmpeg with Homebrew / winget. The user's click on the Piying page: refused in the director
     shell. Elsewhere it only says how."""
     import platform
     if in_agent_shell():
-        raise ShiseiError('installing ffmpeg is the user\'s click on the Shisei page (settings, or where a reference video is added)')
+        raise ShiseiError('installing ffmpeg is the user\'s click on the Piying page (settings, or where a reference video is added)')
     before = ffmpeg_state()
     if before['ready']:
         return {**before, 'installed': False}
@@ -7116,7 +7116,7 @@ def _drama_study(args, cfg):
         name = args.name or v.name
     src = study_source(d)
     if not src:
-        raise ShiseiError('no reference video: add one on the Shisei page or pass --video <file>')
+        raise ShiseiError('no reference video: add one on the Piying page or pass --video <file>')
     dur = ffprobe_duration(src)
     if not dur:
         raise ShiseiError('could not read the reference video (is it a video file?)')
@@ -7159,7 +7159,7 @@ def cmd_drama_study_look(args, cfg):
         if not cfg.get('vision_model'):
             study['look'] = {'status': 'unavailable', 'at': time.time()}
             save_study(d, study)
-            return {'look': study['look'], 'note': 'no image model configured: framing and the rest stay to be picked on the Shisei page'}
+            return {'look': study['look'], 'note': 'no image model configured: framing and the rest stay to be picked on the Piying page'}
         try:
             need_vision(cfg)
         except ShiseiError as e:   # said in study.json too, so the page does not wait for a look that never starts
@@ -8414,7 +8414,7 @@ def cmd_drama_crop(args, cfg):
     `drama-run keyframes` cuts the source locally and redraws it with the `alone` recipe; nothing is spent here.
     --clear removes the instruction (the first frame is then drawn from the script again). --dry-run writes nothing."""
     if in_agent_shell():
-        raise ShiseiError('a close-up crop is framed by the user on the Shisei page, not from the director shell: '
+        raise ShiseiError('a close-up crop is framed by the user on the Piying page, not from the director shell: '
                           'tell the user which part of the first frame you would cut to')
     d, job = drama_dir(args.jobdir)
     story = load_story(d)
@@ -8578,9 +8578,9 @@ def _seconds_range(text):
 def cmd_drama_trim(args, cfg):
     """The user's edit of a segment's picked take, applied at the cut (local, no GPU): `cut` a piece out, `hold` the
     next piece's first frame over it (the sound stays), or `swap` it for the same seconds of another take.
-    From the Shisei page only, like picking a take."""
+    From the Piying page only, like picking a take."""
     if in_agent_shell():
-        raise ShiseiError('editing a take is done by the user on the Shisei page, not from the director shell; '
+        raise ShiseiError('editing a take is done by the user on the Piying page, not from the director shell; '
                           'tell the user which seconds look wrong (drama-shots shows them) and they decide')
     d, _ = drama_dir(args.jobdir)
     story = load_story(d)
@@ -8649,7 +8649,7 @@ def cmd_drama_cut(args, cfg):
         if not takes:
             raise ShiseiError(f'{u["label"]} has no take yet')
         if pick not in takes:
-            raise ShiseiError(f'{u["label"]} has no take picked: the user picks one on the Shisei page '
+            raise ShiseiError(f'{u["label"]} has no take picked: the user picks one on the Piying page '
                               '(drama-recommend only suggests)')
         if verdict(review, 'keyframes', u['id']) == 'reject':   # its takes were made from a picture the user turned down
             raise ShiseiError(f'{u["label"]}: the first frame was rejected; remake it and its takes before the cut')
@@ -8730,7 +8730,7 @@ def cmd_drama_cut(args, cfg):
              'inner_voices': len(voices), 'levelled': bool(args.sound), 'bed': (bed if bed == 'synth' else bed.name) if bed is not None and args.sound else None}
     takes_used = [f'take_{u["id"]}_{review["picks"][u["id"]]}.mp4' for u in cut_units]
     save_json_atomic(d / 'cut.json', {'sound': sound, 'at': time.time(), 'clips': takes_used,
-                                      'label': {'burned_in': burn, 'metadata': 'AI-generated (Shisei)'},
+                                      'label': {'burned_in': burn, 'metadata': 'AI-generated (Piying)'},
                                       # edits / leads: what the cut applied, so a later change shows as 有改动
                                       'edits': used_edits, 'leads': leads,
                                       'units': [{'id': u['id'], 'label': u['label'], 'start': st,
@@ -8769,7 +8769,7 @@ def main(argv=None):
     sub.add_parser('status')
     ins = sub.add_parser('instances')
     ins.add_argument('--pick', action='store_true', help='remember the only suitable instance when none is set')
-    ins.add_argument('--register', metavar='ID', help='add an instance of this account to the machines Shisei may use')
+    ins.add_argument('--register', metavar='ID', help='add an instance of this account to the machines Piying may use')
     ins.add_argument('--unregister', metavar='ID', help='stop using an instance (nothing happens to the instance itself)')
     pa = sub.add_parser('patrol', help='keep every registered machine that is on under a scheduled stop (never stops one)')
     pa.add_argument('--dry-run', action='store_true')
@@ -8809,7 +8809,7 @@ def main(argv=None):
     d = sub.add_parser('down')
     d.add_argument('--yes', action='store_true')
     d.add_argument('--force-other', action='store_true', help='stop it although another project holds it (page only)')
-    jn = sub.add_parser('job-new', help='create a job folder from local files (also visible in the Shisei page)')
+    jn = sub.add_parser('job-new', help='create a job folder from local files (also visible in the Piying page)')
     jn.add_argument('--video', required=True)
     jn.add_argument('--front', required=True)
     jn.add_argument('--face', help='face close-up of the character (one person)')
@@ -8873,7 +8873,7 @@ def main(argv=None):
     m.add_argument('--shot', choices=['close', 'full'], default='close')
     m.add_argument('--remote', action='store_true',
                    help='render on the instance (needs Blender from setup.sh); OUT is a file name in ComfyUI input/')
-    dn = sub.add_parser('drama-new', help='create a drama project folder (also visible in the Shisei page)')
+    dn = sub.add_parser('drama-new', help='create a drama project folder (also visible in the Piying page)')
     dn.add_argument('--title', help='required unless --template gives one')
     dn.add_argument('--template', help='start from a practice project (drama-templates): its script, nothing else')
     dn.add_argument('--idea', default='')
@@ -8885,7 +8885,7 @@ def main(argv=None):
     ds.add_argument('--why', help="the user's words; kept in the change log of every segment this changes")
     dst = sub.add_parser('drama-status')
     dst.add_argument('jobdir')
-    dr = sub.add_parser('drama-review', help="record the user's verdict: assets <file> | keyframes <shot> | pick <shot> <seed> (pass and pick: from the Shisei page only)")
+    dr = sub.add_parser('drama-review', help="record the user's verdict: assets <file> | keyframes <shot> | pick <shot> <seed> (pass and pick: from the Piying page only)")
     dr.add_argument('jobdir')
     dr.add_argument('kind', choices=['assets', 'keyframes', 'pick'])
     dr.add_argument('key')
@@ -8929,7 +8929,7 @@ def main(argv=None):
     dw.add_argument('--source', help='text | library:C123 | upload:<id>')
     dw.add_argument('--picture', action='store_true', help='take the clothes from the PICTURE behind --source (user only): portrait and '
                     'full body are redrawn from the current approved portrait + that picture')
-    dw.add_argument('--image', help='with --picture --source library:<id>: the picture file inside the Shisei library')
+    dw.add_argument('--image', help='with --picture --source library:<id>: the picture file inside the Piying library')
     dw.add_argument('--dry-run', action='store_true')
     dsd = sub.add_parser('drama-study', help='对标片: read a reference video locally (cuts, contact sheets, tone); no GPU, nothing uploaded')
     dsd.add_argument('jobdir')
@@ -8970,7 +8970,7 @@ def main(argv=None):
     dref.add_argument('--swap')
     dref.add_argument('--why')
     dref.add_argument('--dry-run', action='store_true')
-    dcf = sub.add_parser('drama-cast-flag', help='mark a character as looking young (Shisei page only)')
+    dcf = sub.add_parser('drama-cast-flag', help='mark a character as looking young (Piying page only)')
     dcf.add_argument('jobdir')
     dcf.add_argument('cast')
     dcf.add_argument('--look-young', required=True, choices=['on', 'off'])
@@ -9147,13 +9147,13 @@ def main(argv=None):
     mp = sub.add_parser('machine-plan', help='read-only: stock and price of a new machine in every zone (dry-run create)')
     mp.add_argument('--gpu')
     mp.add_argument('--zone')
-    mp.add_argument('--base', action='store_true', help='quote the official base image even when a Shisei image exists')
+    mp.add_argument('--base', action='store_true', help='quote the official base image even when a Piying image exists')
     mc = sub.add_parser('machine-create', help='create ONE machine from the base image, set it up with setup.sh and stop '
                         'it (never deletes). Without --confirm-billing: the plan only. A re-run resumes the last one')
     mc.add_argument('--gpu')
     mc.add_argument('--zone')
     mc.add_argument('--new', action='store_true', help='make another machine instead of resuming the last setup')
-    mc.add_argument('--base', action='store_true', help='create from the official base image even when a Shisei image exists')
+    mc.add_argument('--base', action='store_true', help='create from the official base image even when a Piying image exists')
     mc.add_argument('--instance', help='rerun the setup on this registered machine (stopped) instead of creating one: '
                     'the 机器 page\'s 更新环境 after the plugin moved to a newer environment')
     mc.add_argument('--confirm-billing', action='store_true')
@@ -9162,7 +9162,7 @@ def main(argv=None):
     dk = sub.add_parser('drama-check', help='transcribe takes locally (whisper.cpp) and compare with the script lines')
     dk.add_argument('jobdir')
     dtr = sub.add_parser('drama-trim', help="the user's edit of a picked take, applied at the cut: cut / hold / swap a piece "
-                         '(from the Shisei page only)')
+                         '(from the Piying page only)')
     dtr.add_argument('jobdir')
     dtr.add_argument('segment', help='segment label (A) or its first shot id')
     dtr.add_argument('--at', type=_seconds_range, help='the piece, in seconds of the take: 0-0.58')
@@ -9255,7 +9255,7 @@ def main(argv=None):
                     lease_release(CLAIMED, HOLDER, int(load_config().get('idle_stop_minutes') or 10))
 
 
-# ---------- GPU types: which cards Shisei is known to run on, and how a new one gets on the list ----------
+# ---------- GPU types: which cards Piying is known to run on, and how a new one gets on the list ----------
 # Only a type that passed the whole gpu-qualify suite on that GpuType is listed; nothing else is ever offered to a user
 # as a replacement. Only type names, numbers and dates go in here; raw results (instance, zone, timings) stay in
 # ~/.dsh/shisei/qualify. Candidates seen in the read-only compshare listing (2026-11-11, not verified):
@@ -9267,7 +9267,7 @@ GPU_PROFILES = {
 
 
 def gpu_profile(gpu):
-    """What Shisei knows about a GpuType: its GPU_PROFILES entry, or status 'unverified'."""
+    """What Piying knows about a GpuType: its GPU_PROFILES entry, or status 'unverified'."""
     p = GPU_PROFILES.get(str(gpu or ''))
     return {'gpu': gpu, **p} if p else {'gpu': gpu, 'status': 'unverified'}
 
@@ -9440,7 +9440,7 @@ def probe_problems(p):
     if cc < (8, 9):
         notes.append('no fp8 compute on this architecture: fp8 weights are cast up; the timed take shows what that costs')
     if (p.get('vram_mib') or 0) < 47 * 1024:
-        notes.append(f'{(p.get("vram_mib") or 0) / 1024:.0f} GB: under the 48 GB Shisei was built on; the take step decides')
+        notes.append(f'{(p.get("vram_mib") or 0) / 1024:.0f} GB: under the 48 GB Piying was built on; the take step decides')
     return fatal, notes
 
 
@@ -9458,7 +9458,7 @@ def qualify_plan(gpu, price, swap_frames=None):
             'steps': [{'step': s, 'minutes': round(m, 1)} for s, m in steps], 'minutes': minutes,
             'cost': round(minutes / 60 * price, 2),
             'note': 'minutes are estimates from the 4090 48G drama timings; a slower card takes longer. The machine must '
-                    'already be running and set up (setup.sh, or the Shisei image): this command never starts, creates or '
+                    'already be running and set up (setup.sh, or the Piying image): this command never starts, creates or '
                     'stops one, and the idle stop is armed at the end.'}
 
 
@@ -9586,7 +9586,7 @@ def cmd_gpu_qualify(args, cfg):
             return {'eevee': made, 'notes': [] if made else ['EEVEE rendered nothing (no GL/EGL?); the mannequin would '
                                                                'need SHISEI_ENGINE=CYCLES: ' + r.strip()[-300:]]}
 
-        def prepare():   # models and nodes: what setup.sh (or the Shisei image) puts on the machine
+        def prepare():   # models and nodes: what setup.sh (or the Piying image) puts on the machine
             cmd_tunnel(argparse.Namespace(close=False), cfg)
             for group in ('qwen', 'h3'):
                 linked = ssh_run(cfg, info, ensure_models_script(group), timeout=300)
@@ -9657,7 +9657,7 @@ def cmd_gpu_qualify(args, cfg):
             'auto_stop': f'{int(cfg.get("idle_stop_minutes") or 10)}m'}
 
 
-# ---------- a machine of the user's own, made by the plugin (the Shisei page's 开始 › GPU 机器) ----------
+# ---------- a machine of the user's own, made by the plugin (the Piying page's 开始 › GPU 机器) ----------
 # machine-plan is read-only (stock, sizes and prices of every zone; `instance create --dry-run` is free).
 # machine-create creates ONE instance from the official ComfyUI base image, then: a scheduled stop at the hard limit
 # (first thing, so a lost process still stops it), the user's ssh public key (through compshare-cli's own password
@@ -9669,7 +9669,7 @@ BASE_IMAGE = 'compshareImage-1x98m25rrumc'   # official 「ComfyUI基础镜像�
 SETUP_DISK_GB = 200
 SETUP_LIMIT_MIN = 60     # the scheduled stop set right after create; the quote's ceiling
 SETUP_EST_MIN = 60       # from the base image: setup.sh downloads ~14 GB (measured ~60 min at 4-5 MB/s, 2026-11-12)
-IMAGE_EST_MIN = 10       # from the Shisei community image: boot, checks, and setup.sh fetching only the LoRAs (~4 min)
+IMAGE_EST_MIN = 10       # from the Piying community image: boot, checks, and setup.sh fetching only the LoRAs (~4 min)
 SETUP_BUDGET = SETUP_BUDGET_DEFAULT   # refuse when the ceiling is higher (config setup_budget)
 DEFAULT_GPU = '4090_48G'
 SETUP_STEPS = ('create', 'key', 'secure', 'setup', 'check', 'stop')
@@ -9696,7 +9696,7 @@ def search_sizes(data, gpu):
 
 
 def setup_image(base=False):
-    """(image id, from the Shisei image?) for a new machine: the public community image of this plugin's env when there
+    """(image id, from the Piying image?) for a new machine: the public community image of this plugin's env when there
     is one (docs/IMAGE.md), unless the user asked for the official base image (no image fee, about an hour longer)."""
     public = PUBLIC_IMAGES.get(SHISEI_ENV)
     return (BASE_IMAGE, False) if base or not public else (public, True)
@@ -9846,7 +9846,7 @@ class SetupRun:
 
 
 def ssh_pubkey_path(cfg):
-    """The public half of the ssh key Shisei logs in with, or None (checked before any machine is made)."""
+    """The public half of the ssh key Piying logs in with, or None (checked before any machine is made)."""
     key = resolve_ssh_key(cfg)
     pub = Path(str(key) + '.pub') if key else None
     return pub if pub and pub.is_file() else None
@@ -10022,7 +10022,7 @@ def update_target(cfg, iid):
 def cmd_machine_create(args, cfg):
     """Create and set up one machine (see the section comment). Without --confirm-billing: the plan only."""
     if args.confirm_billing and in_agent_shell():
-        raise ShiseiError('making a machine is started by the user on the Shisei page (开始), not from the director shell')
+        raise ShiseiError('making a machine is started by the user on the 皮影 page (开始), not from the director shell')
     old = setup_progress()
     if old and old.get('state') == 'running' and old.get('pid') and pid_alive(old['pid']):
         raise ShiseiError('a machine is already being set up')
@@ -10052,7 +10052,7 @@ def cmd_machine_create(args, cfg):
     if not ssh_pubkey_path(cfg):   # before anything is created: a machine without the key could not be used
         own = key_to_make(cfg)
         if not own:   # a private key of the user's own without its .pub: theirs to fix, never replaced
-            raise ShiseiError('no ssh key pair yet: make one on the Shisei page (开始 › GPU 机器), then continue')
+            raise ShiseiError('no ssh key pair yet: make one on the 皮影 page (开始 › GPU 机器), then continue')
         make_own_key(own)   # nothing for the user to do: the plugin's own pair, only for these machines
     if quote is not None and quote['over_budget']:
         raise ShiseiError(f'the setup is priced up to ¥{quote["ceiling"]} (the {SETUP_LIMIT_MIN}-minute limit), over '
@@ -10239,7 +10239,7 @@ def series_refuse_archived(s):
 
 def series_user_only(what):
     if in_agent_shell():
-        raise ShiseiError(f'{what} is done by the user on the Shisei page, not from the director shell')
+        raise ShiseiError(f'{what} is done by the user on the Piying page, not from the director shell')
 
 
 def file_sha(p):
@@ -10548,7 +10548,7 @@ def cmd_series_cast_new(args, cfg):
                 raise ShiseiError('看起来年轻或未成年的角色不照照片画：只写长相描述')
             src = Path(args.photo)
             if src.parent.resolve() != sp.resolve() or not re.fullmatch(r'\.photo_upload\.(png|jpe?g|webp)', src.name) or not src.is_file():
-                raise ShiseiError('--photo is the photo the Shisei page saved (.photo_upload.<ext> in the series folder)')
+                raise ShiseiError('--photo is the photo the Piying page saved (.photo_upload.<ext> in the series folder)')
             try:
                 _read_picture(src, 'the photo')
                 subprocess.run(image_to_png_args(src, sp / photo_file(rid), DRAMA_PORTRAIT_SIZE, 'contain'), check=True, capture_output=True, timeout=120)
@@ -10815,7 +10815,7 @@ def set_voice(d, cid, src, why):
 
 def cmd_drama_voice(args, cfg):
     """定声 for one project: one of the character's own voice tracks (vo_<shot>.wav) becomes the reference every take and
-    voice track of that character is made with. The user's choice, on the Shisei page."""
+    voice track of that character is made with. The user's choice, on the Piying page."""
     series_user_only('fixing a voice')
     d, _ = drama_dir(args.jobdir)
     story = load_story(d)

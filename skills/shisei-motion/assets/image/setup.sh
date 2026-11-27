@@ -1,5 +1,5 @@
 #!/bin/bash
-# Shisei Motion 机器环境搭建。在优云智算官方「ComfyUI基础镜像纯净版0.43.0」（compshareImage-1x98m25rrumc）上运行。
+# 皮影 Motion 机器环境搭建。在优云智算官方「ComfyUI基础镜像纯净版0.43.0」（compshareImage-1x98m25rrumc）上运行。
 # 可重复执行：已有的节点会切到锁定的 commit，已下载的权重会核对 sha256。
 # 权重优先软链公共盘 /model，缺的从 ModelScope 按锁定的 revision 下载。
 # 安全：ComfyUI 只监听 127.0.0.1，本机经 ssh -L 访问。
@@ -97,7 +97,7 @@ PIP="pip install -q -i https://pypi.tuna.tsinghua.edu.cn/simple"
 while IFS='|' read -r name url sha; do
   [ -n "$name" ] || continue
   if [ ! -d "$name/.git" ]; then git init -q "$name" && git -C "$name" remote add origin "$url"; fi
-  # already at the pin (a machine from the Shisei image): no GitHub round trip. Otherwise retry: github.com from the
+  # already at the pin (a machine from the Piying image): no GitHub round trip. Otherwise retry: github.com from the
   # instances drops connections (HTTP/2 framing errors, 443 timeouts, 2026-11-13), HTTP/1.1 fails less
   if [ "$(git -C "$name" rev-parse HEAD 2>/dev/null)" != "$sha" ]; then
     for i in 1 2 3 4; do

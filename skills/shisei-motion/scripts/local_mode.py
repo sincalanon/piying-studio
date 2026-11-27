@@ -1,4 +1,4 @@
-"""Local mode: run Shisei against the user's own ComfyUI instead of a rented compshare machine.
+"""Local mode: run Piying against the user's own ComfyUI instead of a rented compshare machine.
 
 Turned on by config `comfy_url` (or env SHISEI_COMFY_URL), e.g.
 

@@ -1,7 +1,7 @@
 {
   "name": "dsh-shisei",
   "version": "0.2.2",
-  "description": "Unofficial DSH plugin: Shisei (拾戏) makes AI short dramas from one sentence (script, cast, first frames, takes, cut) and remakes dance videos with a character of your choice, on your own compshare GPU",
+  "description": "Unofficial DSH plugin: 皮影 (皮影) makes AI short dramas from one sentence (script, cast, first frames, takes, cut) and remakes dance videos with a character of your choice, on your own compshare GPU",
   "icon": "./icon.svg",
   "keywords": [
     "dsh",
