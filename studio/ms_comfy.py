@@ -42,6 +42,9 @@ class ModelScope:
                     return json.loads(f.read().decode())
             except urllib.error.HTTPError as e:
                 msg = f'ModelScope {e.code}: {e.read().decode("utf-8", "replace")[:500]}'
+                if 'insufficient balance' in msg:
+                    raise RuntimeError('魔搭账号的余额或这个模型的免费额度不够了（insufficient balance）：到魔搭充值或等额度恢复，'
+                                       '或在设置里换成自己的 ComfyUI') from None
                 if e.code < 500 and e.code != 429 or wait is None:
                     raise RuntimeError(msg) from None
             except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
