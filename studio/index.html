@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>皮影 Piying Studio</title>
+<link rel="icon" href="/brand/mark.svg" type="image/svg+xml">
+<style>
+:root{--bg:#121318;--panel:#1a1c23;--card:#20232c;--line:#2b2f3a;--tx:#e9e9ee;--mut:#8d93a1;--acc:#c8102e;--acc2:#ff7a45;--ok:#3fb27f;--bad:#e5484d}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:14px/1.55 "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}a{color:inherit}
+.app{display:grid;grid-template-columns:236px 1fr 330px;height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 6px 16px}
+.brand img{width:36px;height:36px;border-radius:9px}
+.brand b{font-size:19px;letter-spacing:2px}.brand small{display:block;color:var(--mut);font-size:11px;letter-spacing:1px}
+.new{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card);margin-bottom:14px}
+.new:hover{border-color:var(--acc2)}
+.sec{color:var(--mut);font-size:12px;margin:6px 8px}
+.jobs{flex:1;overflow:auto}
+.job{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:9px;margin:2px 0;cursor:pointer;color:#cfd1d8}
+.job:hover{background:var(--card)}.job.on{background:var(--card);color:#fff;font-weight:600}
+.job small{color:var(--mut);font-weight:400;font-size:11px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--acc2);display:inline-block;margin-right:6px;animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.3}}
+.machine{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--mut)}
+.machine b{color:var(--tx);font-weight:500}.machine i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);margin-right:6px}
+.machine i.off{background:var(--bad)}
+.link{background:none;border:0;color:var(--mut);padding:8px 8px 0;text-align:left}
+.main{overflow:auto;padding:22px 28px 90px;position:relative}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:6px}
+.head h1{margin:0;font-size:22px}.head p{margin:4px 0 0;color:var(--mut)}
+.steps{display:flex;gap:6px;margin:18px 0 20px;flex-wrap:wrap}
+.step{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut)}
+.step.on{background:#fff;color:#111;border-color:#fff;font-weight:600}.step.done::before{content:"✓ ";color:var(--ok)}
+.grid{align-items:start;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card .pic{aspect-ratio:9/16;background:#111 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px}
+.card .pic.sq{aspect-ratio:1/1}
+.card .meta{padding:9px 11px}
+.card .meta b{display:block;font-size:13px}.card .meta span{color:var(--mut);font-size:12px}
+.acts{display:flex;gap:6px;padding:0 11px 11px}
+.acts button{flex:1;padding:6px;border-radius:8px;border:1px solid var(--line);background:transparent;font-size:12px}
+.acts .pass.on{background:var(--ok);border-color:var(--ok);color:#06170f}.acts .rej.on{background:var(--bad);border-color:var(--bad)}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;border:1px solid var(--line);color:var(--mut)}
+.tag.ok{color:var(--ok);border-color:#2a5b45}.tag.bad{color:var(--bad);border-color:#5b2a2d}
+.seg{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:200px 1fr;gap:18px}
+.seg .lines{color:#cfd1d8;font-size:13px}.seg .lines div{margin:3px 0}.seg .lines em{color:var(--mut);font-style:normal}
+.takes{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.take{width:150px}.take video{width:150px;aspect-ratio:9/16;border-radius:10px;background:#000;display:block}
+.take button{width:100%;margin-top:6px;padding:5px;border-radius:8px;border:1px solid var(--line);background:transparent;font-size:12px}
+.take button.on{background:#fff;color:#111}
+.script{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;color:#d8d9df}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mut);font-weight:500}
+.bar{position:fixed;left:236px;right:330px;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+.bar span{color:var(--mut)}
+.go{padding:11px 22px;border-radius:12px;border:0;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-weight:600;box-shadow:0 6px 18px #c8102e40}
+.go:disabled{opacity:.45;cursor:default;box-shadow:none}
+.dir{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column}
+.dir h3{margin:0;padding:16px 16px 4px;font-size:14px}.dir .sub{color:var(--mut);font-size:12px;padding:0 16px 10px;border-bottom:1px solid var(--line)}
+.log{flex:1;overflow:auto;padding:12px 16px;font-size:12.5px;color:#c9cbd3}
+.log div{margin:0 0 6px}.log .t{color:var(--mut);margin-right:6px}
+.msg{background:var(--card);border-radius:12px;padding:8px 10px;margin:0 0 10px}.msg.me{background:#2c2f3b;margin-left:30px}
+.ask{padding:12px;border-top:1px solid var(--line)}
+.ask textarea{width:100%;height:78px;resize:none;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);padding:10px;font:inherit}
+.ask button{margin-top:8px;width:100%;padding:9px;border-radius:10px;border:0;background:#fff;color:#111;font-weight:600}
+.empty{color:var(--mut);text-align:center;margin-top:18vh}.empty img{width:120px;opacity:.9;border-radius:24px}
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:9}.modal.on{display:flex}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;width:480px;max-width:92vw}
+.box h2{margin:0 0 14px;font-size:18px}.box label{display:block;color:var(--mut);font-size:12px;margin:12px 0 5px}
+.box input,.box textarea,.box select{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:9px 10px;font:inherit}
+.box .row{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}.box .row button{padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:transparent}
+.box .row .pri{background:#fff;color:#111;border:0;font-weight:600}
+.tpl{display:flex;gap:8px;flex-wrap:wrap}.tpl button{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:12px}
+.final video{max-height:70vh;border-radius:14px;background:#000}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><img src="/brand/mark.svg" alt=""><div><b>皮影</b><small>短剧 · 翻拍</small></div></div>
+    <button class="new" onclick="openNew()">＋ 新建短剧</button>
+    <div class="sec">项目</div>
+    <div class="jobs" id="jobs"></div>
+    <div class="machine" id="machine"></div>
+    <button class="link" onclick="openSettings()">⚙ 设置</button>
+  </aside>
+  <main class="main" id="main"></main>
+  <aside class="dir">
+    <h3>导演</h3>
+    <div class="sub" id="dirsub">告诉导演你想怎么拍，或哪里不对</div>
+    <div class="log" id="log"></div>
+    <div class="ask"><textarea id="ask" placeholder="例如：第二段改成近景，让她先开口"></textarea><button onclick="revise()">发给导演</button></div>
+  </aside>
+</div>
+<div class="bar" id="bar"></div>
+
+<div class="modal" id="mNew"><div class="box">
+  <h2>新建短剧</h2>
+  <label>片名</label><input id="nTitle" placeholder="雨夜便利店">
+  <label>一句话故事</label><textarea id="nIdea" rows="3" placeholder="深夜便利店里，女店员认出了来买伞的男人是十年前不告而别的初恋"></textarea>
+  <label>每段拍几条</label><select id="nSeeds"><option>1</option><option>2</option><option>3</option></select>
+  <label>或者从练手剧本开始</label><div class="tpl" id="tpls"></div>
+  <div class="row"><button onclick="closeM('mNew')">取消</button><button class="pri" onclick="createJob()">让导演写剧本</button></div>
+</div></div>
+
+<div class="modal" id="mSet"><div class="box">
+  <h2>设置</h2>
+  <label>出图出视频</label>
+  <select id="sBackend"><option value="modelscope">魔搭 API（不用显卡）</option><option value="comfyui">我自己的 ComfyUI</option></select>
+  <label>魔搭访问令牌 <span id="sKeyState"></span></label><input id="sKey" type="password" placeholder="ms-…（只存在这台电脑上）">
+  <label>ComfyUI 地址</label><input id="sUrl" placeholder="http://127.0.0.1:8188">
+  <label>ComfyUI 文件夹（可选，同一台电脑时填）</label><input id="sDir" placeholder="D:/ComfyUI">
+  <label>导演模型</label><input id="sModel">
+  <div class="row"><button onclick="closeM('mSet')">取消</button><button class="pri" onclick="saveSettings()">保存</button></div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={jobs:[]}, cur=null, J=null, tab=null, poll=null;
+const api=async(p,b)=>{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});return r.json()};
+const STEPS=[['script','剧本'],['assets','定妆'],['keyframes','首帧'],['takes','拍摄'],['final','成片']];
+const NAMES={cast:'演员',scene:'场景',prop:'道具'};
+
+async function refresh(){
+  S=await api('/api/state');
+  $('#jobs').innerHTML=S.jobs.map(j=>`<div class="job ${j.id===cur?'on':''}" onclick="pick('${j.id}')"><span>${j.running?'<i class="dot"></i>':''}${esc(j.title)}</span><small>${j.final?'成片':j.has_story?'':'写剧本'}</small></div>`).join('')||'<div class="sec">还没有项目</div>';
+  const ms=S.config.backend==='modelscope';
+  $('#machine').innerHTML=`<i class="${(ms&&!S.key_set)?'off':''}"></i><b>${ms?'魔搭 API':'本地 ComfyUI'}</b> · ${ms?(S.key_set?'已就绪':'缺令牌'):esc(S.config.comfy_url)}<br>¥0 · 不计 GPU 费`;
+  if(!cur&&S.jobs.length) pick(S.jobs[0].id); else if(!cur) renderEmpty();
+}
+function renderEmpty(){$('#main').innerHTML=`<div class="empty"><img src="/brand/logo_primary.webp"><h2>一句话，拍成戏</h2><p>点「新建短剧」，写下一句故事，导演帮你写剧本。</p></div>`;$('#bar').innerHTML=''}
+async function pick(id){cur=id;tab=null;await load();refresh()}
+async function load(){
+  if(!cur) return;
+  J=await api('/api/job?id='+cur);
+  if(!tab) tab=stageOf();
+  render();
+  clearTimeout(poll); if(J.task&&J.task.running) poll=setTimeout(load,3000);
+}
+function stageOf(){const st=J.status||{};if(!J.story)return 'script';if(J.files.includes('final.mp4'))return 'final';const s=st.stage||'assets';return ({script:'script',assets:'assets',keyframes:'keyframes',takes:'takes',cut:'takes',done:'final',final:'final'})[s]||'assets'}
+const img=f=>J.files.includes(f)?`/media/${cur}/${encodeURIComponent(f)}?v=${Date.now()%100000}`:null;
+
+function render(){
+  const st=J.status||{}, idx=STEPS.findIndex(s=>s[0]===stageOf());
+  $('#main').innerHTML=`<div class="head"><div><h1>${esc(J.job.title)}</h1><p>${esc(J.job.idea||J.job.prompt||'')}</p></div><span class="tag">${J.story?(J.story.shots.length+' 镜 · '+(st.shots||[]).length+' 段'):'剧本还没写'}</span></div>
+  <div class="steps">${STEPS.map((s,i)=>`<button class="step ${s[0]===tab?'on':''} ${i<idx?'done':''}" onclick="tab='${s[0]}';render()">${s[1]}</button>`).join('')}</div>
+  <div id="body"></div>`;
+  ({script:rScript,assets:rAssets,keyframes:rKeys,takes:rTakes,final:rFinal})[tab]();
+  renderLog(); renderBar();
+}
+function rScript(){
+  if(!J.story){$('#body').innerHTML=`<div class="empty" style="margin-top:8vh">${J.task&&J.task.running?'导演正在写剧本…':'还没有剧本'}</div>`;return}
+  const s=J.story;
+  $('#body').innerHTML=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${s.cast.map(c=>`<div class="card"><div class="meta"><b>${esc(c.name)} · ${c.age} 岁</b><span>${esc(c.look)}</span></div></div>`).join('')}</div>
+  <table><tr><th>镜</th><th>秒</th><th>画面</th><th>台词</th></tr>${s.shots.map(x=>`<tr><td>${x.id}</td><td>${x.seconds}</td><td>${esc(x.keyframe)}</td><td>${x.line?esc((s.cast.find(c=>c.id===x.line.who)||{}).name+'：'+x.line.text)+(x.line.kind==='inner'?' <span class="tag">心里</span>':''):''}</td></tr>`).join('')}</table>
+  <h3 style="margin-top:22px">剧本</h3><div class="script">${esc(s.script)}</div>`;
+}
+function verdictBtns(kind,key,v){return `<div class="acts"><button class="pass ${v==='pass'?'on':''}" onclick="review('${kind}','${key}','pass')">通过</button><button class="rej ${v==='reject'?'on':''}" onclick="rejectIt('${kind}','${key}')">退回</button></div>`}
+function rAssets(){
+  const a=(J.status||{}).assets||{};
+  $('#body').innerHTML=`<div class="grid">${Object.entries(a).map(([f,x])=>{const k=f.split('_')[0];const rest=f.replace(/\.png$/,'').slice(k.length+1);const n=k==='cast'?[rest.slice(0,rest.lastIndexOf('_')),rest.slice(rest.lastIndexOf('_')+1)]:[rest];const who=k==='cast'?((J.story.cast.find(c=>c.id===n[0])||{}).name+(n[1]==='face'?' · 定妆':' · 全身')):k==='scene'?(J.story.scenes.find(c=>c.id===n[0])||{}).name:(J.story.props.find(c=>c.id===n[0])||{}).name;const u=img(f);
+    return `<div class="card"><div class="pic ${k!=='cast'||n[1]==='face'?'sq':''}" style="${u?`background-image:url('${u}')`:''}">${u?'':'待画'}</div><div class="meta"><b>${esc(who)}</b><span>${NAMES[k]||''} ${x.review==='pass'?'<span class="tag ok">已通过</span>':x.review==='reject'?'<span class="tag bad">已退回</span>':''}</span></div>${x.made?verdictBtns('assets',f,x.review):''}</div>`}).join('')}</div>`;
+}
+function segLines(u){return (u.members||[u.id]).map(id=>{const x=J.story.shots.find(s=>s.id===id);if(!x)return '';const who=x.line?(J.story.cast.find(c=>c.id===x.line.who)||{}).name:'';return `<div><b>${id}</b> <em>${x.seconds}s</em> ${esc(x.keyframe)}${x.line?`<br><em>${esc(who)}${x.line.kind==='inner'?'（心里）':''}：</em>${esc(x.line.text)}`:''}</div>`}).join('')}
+function rKeys(){
+  const sh=(J.status||{}).shots||[];
+  $('#body').innerHTML=sh.map(u=>{const f=`kf_${u.id}.png`,s=img(f);return `<div class="seg"><div class="card"><div class="pic" style="${s?`background-image:url('${s}')`:''}">${s?'':'首帧待画'}</div>${s?verdictBtns('keyframes',u.id,u.review):''}</div><div><b>段 ${u.label}</b> <span class="tag">${esc(u.state_label||'')}</span><div class="lines">${segLines(u)}</div></div></div>`}).join('')||'<p>先通过全部定妆图</p>';
+}
+function rTakes(){
+  const sh=(J.status||{}).shots||[];
+  $('#body').innerHTML=sh.map(u=>{const tk=(u.takes||[]).map(t=>typeof t==='object'?t.seed:t);return `<div class="seg"><div class="card"><div class="pic" style="${img(`kf_${u.id}.png`)?`background-image:url('${img(`kf_${u.id}.png`)}')`:''}"></div></div><div><b>段 ${u.label}</b> <span class="tag">${esc(u.state_label||'')}</span><div class="lines">${segLines(u)}</div>
+  <div class="takes">${tk.map((s,i)=>`<div class="take"><video src="${img(`take_${u.id}_${s}.mp4`)}" controls preload="metadata"></video><button class="${u.pick==s?'on':''}" onclick="review('pick','${u.id}','${u.pick==s?'none':s}')">${u.pick==s?'✓ 已选第 '+(i+1)+' 条':'用第 '+(i+1)+' 条'}</button></div>`).join('')||'<span class="tag">还没拍</span>'}</div></div></div>`}).join('');
+}
+function rFinal(){
+  const u=img('final.mp4');
+  $('#body').innerHTML=u?`<div class="final"><video src="${u}" controls></video><p><a href="${u}" download>下载 MP4</a></p></div>`:'<p>每段都选好一条后，点底部的「合成成片」。</p>';
+}
+function renderLog(){
+  const t=J&&J.task;
+  $('#dirsub').innerHTML=t&&t.running?'<i class="dot"></i>正在工作…':'告诉导演你想怎么拍，或哪里不对';
+  $('#log').innerHTML=(t?t.log:[]).filter(l=>!/local mode|model files not checked/.test(l)).map(l=>{const m=l.match(/^(\S+) (.*)$/);const me=/^\S+ 你：/.test(l);return `<div class="msg ${me?'me':''}"><span class="t">${m?m[1]:''}</span>${esc(m?m[2]:l)}</div>`}).join('')||'<div class="sec">还没有对话</div>';
+  $('#log').scrollTop=1e9;
+}
+function renderBar(){
+  const st=J.status||{}, run=J.task&&J.task.running;
+  let label=null, act=null, hint='';
+  if(!J.story){hint='导演写好剧本后会显示在这里'}
+  else if(tab==='assets'||tab==='script'){const a=Object.values(st.assets||{});const miss=a.filter(x=>!x.made||x.review==='reject').length;if(miss){label=`画 ${miss} 张定妆图`;act="run('assets')"}else{hint=a.every(x=>x.review==='pass')?'定妆都通过了，去画首帧':'逐张通过或退回'}}
+  else if(tab==='keyframes'){const sh=st.shots||[];const miss=sh.filter(u=>!J.files.includes(`kf_${u.id}.png`)||u.review==='reject').length;if(miss){label=`画 ${miss} 张首帧`;act="run('keyframes')"}else hint='首帧都画好了，逐张通过后去拍摄'}
+  else if(tab==='takes'){const sh=st.shots||[];const miss=sh.filter(u=>!(u.takes||[]).length).length;if(miss){label=`拍 ${miss} 段视频`;act="run('takes')"}else if(sh.every(u=>u.pick)){label='合成成片';act='cut()'}else hint='每段选一条'}
+  else if(tab==='final'&&!J.files.includes('final.mp4')){label='合成成片';act='cut()'}
+  const price=S.config&&S.config.backend==='modelscope'?'魔搭 API · 不计 GPU 费':'本地 ComfyUI · 不计费';
+  $('#bar').innerHTML=`<span>${run?'<i class="dot"></i>任务进行中，可以先看别的':esc(hint||price)}</span>${label?`<button class="go" ${run?'disabled':''} onclick="${act}">${label}<br><small style="font-weight:400;opacity:.85">${price}</small></button>`:''}`;
+}
+async function run(stage){const r=await api('/api/run',{job:cur,stage});if(r.error)alert(r.error);load();refresh()}
+async function cut(){const r=await api('/api/cut',{job:cur});if(r.error)alert(r.error);tab='final';load()}
+async function review(kind,key,value,note){const r=await api('/api/review',{job:cur,kind,key,value,note});if(r.ok===false)alert(r.error);load()}
+function rejectIt(kind,key){const n=prompt('退回原因（导演会照着改）','');if(n!==null)review(kind,key,'reject',n)}
+async function revise(){const t=$('#ask').value.trim();if(!t||!cur)return;const r=await api('/api/revise',{job:cur,text:t});if(r.error)return alert(r.error);$('#ask').value='';tab='script';load();refresh()}
+async function openNew(){$('#mNew').classList.add('on');const t=await api('/api/templates');$('#tpls').innerHTML=(t.templates||[]).map(x=>`<button onclick="fromTpl('${x.id}')">${esc(x.title)} · ${x.seconds}s</button>`).join('')}
+async function fromTpl(id){const r=await api('/api/new',{template:id});closeM('mNew');if(r.ok){cur=r.job;tab='script';await refresh();load()}else alert(r.error)}
+async function createJob(){const r=await api('/api/new',{title:$('#nTitle').value.trim(),idea:$('#nIdea').value.trim(),seeds:$('#nSeeds').value});if(!r.ok)return alert(r.error);closeM('mNew');cur=r.job;tab='script';await refresh();load()}
+function openSettings(){const c=S.config;$('#sBackend').value=c.backend;$('#sUrl').value=c.comfy_url;$('#sDir').value=c.comfy_dir||'';$('#sModel').value=c.director_model;$('#sKeyState').textContent=S.key_set?'（已设置）':'（未设置）';$('#mSet').classList.add('on')}
+async function saveSettings(){await api('/api/config',{backend:$('#sBackend').value,comfy_url:$('#sUrl').value,comfy_dir:$('#sDir').value,director_model:$('#sModel').value,key:$('#sKey').value});closeM('mSet');refresh()}
+function closeM(id){$('#'+id).classList.remove('on')}
+refresh(); setInterval(()=>{refresh(); if(J&&J.task&&!J.task.running) {} },8000);
+</script>
+</body>
+</html>

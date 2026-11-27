@@ -15,6 +15,7 @@
 - [安装](#安装)
 - [第一次打开：配置](#第一次打开配置)
 - [使用指南](#使用指南)
+- [不装 dsh：皮影独立版](#不装-dsh皮影独立版)
 - [本地 ComfyUI 模式](#本地-comfyui-模式)
 - [花钱、安全和隐私](#花钱安全和隐私)
 - [常见问题](#常见问题)
@@ -136,6 +137,25 @@ python3 -I $S drama-run <项目目录> assets --confirm-billing
 ### 5. 舞蹈翻拍
 
 首页切到「翻拍」，上传舞蹈视频、成年角色的全身正面图和脸部特写，写一句衣服描述。确认开机后依次跑 SAM 3D Body 动捕、Blender 白模、MiniMax H3 换人，输出三栏对照成片。不满意可以加拍或改衣服重拍，动捕和白模会直接复用。
+
+## 不装 dsh：皮影独立版
+
+只要 Python 3.9+ 和 ffmpeg，不用装 dsh 和显卡：
+
+```bash
+git clone https://github.com/sincalanon/piying-studio.git
+cd piying-studio
+export MODELSCOPE_API_KEY=ms-你的令牌      # 也可以打开网页后在「设置」里填
+python3 studio/app.py                      # 浏览器打开 http://127.0.0.1:7860
+```
+
+- **导演**：魔搭的对话模型（默认 `Qwen/Qwen3.5-122B-A10B`）按 `skills/shisei-drama/SKILL.md` 的规矩写 story.json，`drama-set` 检查不过就把问题发回给它重写，最多 4 轮。实测一句话故事约 40 秒写出 5 镜 2 段的剧本。
+- **出图、拍视频**，在「设置」里二选一：
+  - **魔搭 API**（默认，不用显卡）：`studio/ms_comfy.py` 在本机扮成一个 ComfyUI，把定妆和首帧交给 `Qwen/Qwen-Image` / `Qwen/Qwen-Image-Edit`，把视频交给 `MiniMax/MiniMax-H3`（用首帧生成，3/5/10 秒，带声音）。
+  - **自己的 ComfyUI**：填地址（同一台电脑再填文件夹），走[本地 ComfyUI 模式](#本地-comfyui-模式)。
+- **网页**：左边是项目，中间按「剧本 → 定妆 → 首帧 → 拍摄 → 成片」逐步推进，每张图点「通过 / 退回」，每段选一条视频，最后点「合成成片」；右边是导演，可以随时说哪里要改。
+- 项目和插件版共用 `~/.dsh/shisei/jobs/`，两边都能打开。
+- 魔搭限制：视频只按首帧生成，不用角色参考图和声音样本，同一角色在不同段的长相和声音可能有出入；真人照片会被内容审核拦下；免费额度用完后接口会报错。舞蹈翻拍要 48G 显卡，独立版不支持。
 
 ## 本地 ComfyUI 模式
 
